@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>عجلة الأمن السيبراني</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Fixed brand header (optional) -->
+    <header class="brand-header" aria-label="الشريط العلوي">
+      <img class="brand-left" src="logo.svg" alt="شعار" />
+      <img class="brand-right" src="slogan.svg" alt="شعار الحملة" />
+    </header>
+
+    <main class="wrap">
+      <section class="intro">
+        <h1 class="title">عجلة الأمن السيبراني</h1>
+        <p class="lead">
+          لفّ العجلة لاختيار مجال، ثم أجب عن سؤال سريع ب٤ خيارات.
+        </p>
+      </section>
+
+      <!-- Wheel stage -->
+      <section id="wheel-stage" class="wheel-stage" aria-live="polite">
+        <div class="wheel-box">
+          <canvas id="cyberWheel" aria-label="عجلة المجالات"></canvas>
+        </div>
+        <button id="wheel-spin-btn" class="btn primary" type="button">
+          لفّ العجلة
+        </button>
+        <p class="hint">بعد توقف العجلة ستظهر نافذة بالسؤال.</p>
+      </section>
+    </main>
+
+    <!-- Quiz modal -->
+    <div
+      id="quiz-modal"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="quiz-title"
+    >
+      <div class="modal-content">
+        <button id="quiz-close" class="close" aria-label="إغلاق">
+          &times;
+        </button>
+        <h2 id="quiz-title">سؤال سريع</h2>
+        <p id="quiz-field" class="quiz-field"></p>
+        <p id="quiz-question" class="quiz-question"></p>
+
+        <div
+          id="quiz-options"
+          class="options-grid"
+          role="group"
+          aria-label="خيارات الإجابة"
+        ></div>
+
+        <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
+
+        <div class="actions">
+          <button id="quiz-continue" class="btn primary hidden">
+            لفّ مجددًا
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>

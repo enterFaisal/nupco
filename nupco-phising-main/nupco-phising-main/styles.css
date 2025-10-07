@@ -1,0 +1,324 @@
+/* ------------------------------------------------------
+   Brand tokens (from your reference palette)
+------------------------------------------------------ */
+:root {
+  --bg: #1c2346; /* deep navy */
+  --ink: #ededed; /* light text */
+  --accent: #e06e0e; /* orange */
+  --accent-2: #e3151c; /* red */
+  --card: #2a2f57; /* card surface */
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --radius: 16px;
+
+  --header-h: 76px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  font-family: "Cairo", sans-serif;
+  background: var(--bg) url("bg-1080x1920.svg") center/cover no-repeat fixed;
+  color: var(--ink);
+  direction: rtl;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------
+   Header (logo left, slogan right)
+------------------------------------------------------ */
+.brand-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: calc(var(--header-h) + var(--safe-top));
+  padding: calc(10px + var(--safe-top)) max(16px, var(--safe-right)) 10px
+    max(16px, var(--safe-left));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  direction: ltr; /* forces physical left/right */
+  z-index: 20;
+  pointer-events: none;
+}
+.brand-header img {
+  height: clamp(64px, 9vw, 108px); /* bigger */
+  max-width: 44vw;
+  object-fit: contain;
+  pointer-events: auto;
+}
+
+/* ------------------------------------------------------
+   Layout
+------------------------------------------------------ */
+.game-wrap {
+  padding-top: calc(var(--header-h) + var(--safe-top) + 14px);
+  padding-right: max(12px, var(--safe-right));
+  padding-left: max(12px, var(--safe-left));
+  padding-bottom: max(16px, var(--safe-bottom));
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.game-container {
+  width: min(760px, 94vw);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+}
+.hidden {
+  display: none !important;
+}
+
+.game-title {
+  font-weight: 800;
+  font-size: clamp(1.2rem, 2.4vw + 0.8rem, 2rem);
+}
+
+/* HUD */
+.hud {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.pill {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 10px 16px;
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  font-size: clamp(0.95rem, 2vw + 0.4rem, 1rem);
+}
+
+/* ------------------------------------------------------
+   Email card (gradient border + chrome + ribbon)
+------------------------------------------------------ */
+.email-card {
+  position: relative;
+  text-align: right;
+  overflow: hidden;
+  border-radius: var(--radius);
+  /* gradient border like the mock */
+  background: linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #ffb36a, #ff6a3d 45%, #e3151c) border-box;
+  border: 3px solid transparent;
+  box-shadow: var(--shadow);
+  color: #101010;
+  padding: clamp(12px, 2.6vw, 22px);
+}
+
+/* top “window” chrome */
+.email-chrome {
+  position: relative;
+  height: 36px;
+  background: linear-gradient(90deg, #f8f8f8 0, #f1f1f1 100%),
+    repeating-linear-gradient(90deg, #ff9b57 0 12px, #ff6a3d 12px 24px);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid #eee;
+}
+.email-chrome .dots {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  display: flex;
+  gap: 6px;
+}
+.email-chrome .dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff6a3d;
+  box-shadow: 16px 0 0 #ffb04a, 32px 0 0 #e3151c;
+}
+
+/* ribbon (neutral text so it doesn’t reveal status) */
+.email-card[data-badge]::before {
+  content: attr(data-badge);
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  transform: rotate(-6deg);
+  background: repeating-linear-gradient(90deg, #ff9b57 0 8px, #ff6a3d 8px 16px);
+  color: #fff;
+  font-weight: 800;
+  padding: 10px 16px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+.email-subject {
+  font-size: clamp(1.05rem, 2.2vw + 0.6rem, 1.35rem);
+  margin-bottom: 6px;
+}
+.email-meta {
+  opacity: 0.75;
+  margin-bottom: 10px;
+  font-size: clamp(0.92rem, 2vw + 0.4rem, 1rem);
+}
+.email-content {
+  line-height: 1.8;
+  font-size: clamp(0.98rem, 2vw + 0.45rem, 1.06rem);
+  word-break: break-word;
+}
+.email-content a {
+  color: #0b68d0;
+  text-decoration: underline;
+  pointer-events: none;
+}
+
+/* tag pills (neutral) */
+.tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 12px;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #fff;
+  box-shadow: var(--shadow);
+  background: linear-gradient(135deg, #ffb36a, #ff6a3d);
+}
+
+/* review card keeps the same styling + scroll */
+.email-card.small {
+  max-height: 56dvh;
+  overflow: auto;
+  background: linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #ffb36a, #ff6a3d 45%, #e3151c) border-box;
+  border: 3px solid transparent;
+}
+
+/* ------------------------------------------------------
+   Buttons (unified system)
+------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: clamp(1rem, 2.6vw + 0.4rem, 1.05rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.2s ease, opacity 0.2s ease;
+  box-shadow: var(--shadow);
+}
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+.btn.primary {
+  background: var(--accent-2);
+  color: #fff;
+}
+.btn.secondary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn.ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.btn.danger {
+  background: #d92626;
+  color: #fff;
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 6px;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 12px;
+}
+.end-actions {
+  margin-top: 16px;
+}
+
+/* ------------------------------------------------------
+   Modals
+------------------------------------------------------ */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 100;
+}
+.modal.hidden {
+  display: none;
+}
+.modal-content {
+  width: min(720px, 94vw);
+  background: var(--bg);
+  color: var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(18px, 2.6vw, 28px);
+  text-align: right;
+  position: relative;
+}
+.modal-content.center {
+  text-align: center;
+}
+.modal-content h2 {
+  font-size: clamp(1.1rem, 2.2vw + 0.7rem, 1.4rem);
+  margin-bottom: 8px;
+}
+.modal-content p {
+  line-height: 1.8;
+}
+.close {
+  position: absolute;
+  left: 12px;
+  top: 8px;
+  font-size: 28px;
+  font-weight: 900;
+  color: #ffb4ab;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 420px) {
+  .action-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+/* Review explanation — red like the original */
+.explanation {
+  color: #E3151C;      /* brand red (or use plain 'red') */
+  font-weight: 800;    /* bold */
+  white-space: pre-wrap; /* keep line breaks from JS */
+  margin-top: 10px;
+}

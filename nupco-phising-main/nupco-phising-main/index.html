@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>تحدّي التصيّد</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Fixed brand header: logo (left), slogan (right) -->
+    <header class="brand-header" aria-label="الشريط العلوي">
+      <img class="brand-left" src="logo.svg" alt="شعار نوبكو" />
+      <img class="brand-right" src="slogan.svg" alt="شعار الحملة" />
+    </header>
+
+    <!-- Intro modal -->
+    <div
+      id="instruction-modal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="inst-title"
+    >
+      <div class="modal-content">
+        <h2 id="inst-title">تحدّي التصيّد</h2>
+        <p>
+          خلال 60 ثانية ستظهر لك رسائل بريد تبدو مرتبطة ببيئة نوبكو. مهمتك تحديد
+          الرسائل الاحتيالية والإبلاغ عنها.
+        </p>
+        <div class="actions">
+          <button id="start-btn" class="btn primary">ابدأ اللعبة</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game -->
+    <main class="game-wrap">
+      <div class="game-container hidden" aria-live="polite">
+        <h1 class="game-title">تحدّي التصيّد</h1>
+
+        <div class="hud">
+          <div class="pill">النتيجة: <span id="score">0</span></div>
+          <div class="pill">الوقت المتبقي: <span id="timer">60</span>ث</div>
+        </div>
+
+        <!-- Email card (gradient border + chrome + ribbon) -->
+        <section id="email-card" class="email-card" data-badge="">
+          <div class="email-chrome">
+            <div class="dots"><span></span><span></span><span></span></div>
+          </div>
+          <h2 id="email-subject" class="email-subject">الموضوع: …</h2>
+          <p id="email-sender" class="email-meta">من: …</p>
+          <div id="email-content" class="email-content"></div>
+          <div id="email-tags" class="tags"></div>
+        </section>
+
+        <div class="action-buttons">
+          <button id="delete-btn" class="btn secondary">ليست احتيالية</button>
+          <button id="report-btn" class="btn danger">الإبلاغ عن تصيّد</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Review modal (explanations live here only) -->
+    <div
+      id="review-modal"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="review-title"
+    >
+      <div class="modal-content">
+        <span id="close-modal" class="close" aria-label="إغلاق">&times;</span>
+        <h2 id="review-title">مراجعة الإجابات</h2>
+
+        <div class="email-card small" data-badge="">
+          <div class="email-chrome">
+            <div class="dots"><span></span><span></span><span></span></div>
+          </div>
+          <h3 id="review-email-subject" class="email-subject">الموضوع:</h3>
+          <p id="review-email-sender" class="email-meta">من:</p>
+          <div id="review-email-content" class="email-content"></div>
+          <p class="explanation" id="review-explanation"></p>
+        </div>
+
+        <div class="navigation-buttons">
+          <button id="prev-btn" class="btn ghost">السابق</button>
+          <button id="next-btn" class="btn ghost">التالي</button>
+        </div>
+
+        <div class="actions end-actions">
+          <button id="replay-btn" class="btn primary">إعادة اللعب</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- End screen -->
+    <div
+      id="end-screen"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="end-title"
+    >
+      <div class="modal-content center">
+        <h2 id="end-title">انتهت الجولة!</h2>
+        <p id="end-summary"></p>
+        <div class="actions">
+          <button id="end-review-btn" class="btn ghost">مراجعة الإجابات</button>
+          <button id="end-replay-btn" class="btn primary">إعادة اللعب</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
