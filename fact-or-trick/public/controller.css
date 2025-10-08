@@ -55,15 +55,15 @@ body {
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 8px;
+  justify-content: space-between;
+  padding: 8px 20px;
   z-index: 100;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   flex-shrink: 0;
 }
 
 .mobile-logo {
-  height: clamp(32px, 6vh, 40px); /* Responsive logo */
+  height: clamp(40px, 7vh, 48px); /* Responsive logo */
   object-fit: contain;
 }
 
