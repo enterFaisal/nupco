@@ -334,15 +334,6 @@ function resetPlayerAnswerStatus(answerBox) {
 }
 
 function updatePlayerResult(resultElement, playerData, allResults) {
-  // Update podium rank
-  const otherPlayer = allResults.find(
-    (r) => r.playerNumber !== playerData.playerNumber
-  );
-  const rank = playerData.totalScore > (otherPlayer?.totalScore || 0) ? 1 : 2;
-
-  const podium = resultElement.querySelector(".podium");
-  podium.setAttribute("data-rank", rank);
-
   // Update answer
   const answerBadge = resultElement.querySelector(".answer-badge");
   if (playerData.answer) {
@@ -353,10 +344,6 @@ function updatePlayerResult(resultElement, playerData, allResults) {
     answerBadge.textContent = "لم يجب";
     answerBadge.classList.add("wrong");
   }
-
-  // Update time
-  const timeEl = resultElement.querySelector('[id$="-result-time"]');
-  timeEl.textContent = playerData.responseTime.toFixed(1);
 
   // Update points earned
   const pointsEl = resultElement.querySelector(".points-earned");

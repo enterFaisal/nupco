@@ -104,8 +104,6 @@
 
       <!-- Results Screen -->
       <div id="results-screen" class="screen hidden">
-        <h2 class="results-title">نتائج السؤال</h2>
-
         <div class="correct-answer-card">
           <div class="answer-label">الإجابة الصحيحة:</div>
           <div class="answer-value" id="correct-answer">حقيقة</div>
@@ -114,22 +112,12 @@
         <!-- Results Comparison -->
         <div class="results-comparison">
           <div class="player-result" id="player1-result">
-            <div class="podium-container">
-              <div class="podium" data-rank="2">
-                <div class="player-icon-large">👤</div>
-                <div class="player-name-large">اللاعب 1</div>
-              </div>
-            </div>
+            <div class="player-name-large">اللاعب 1</div>
             <div class="result-info">
               <div class="result-answer">
-                <span class="answer-label">الإجابة:</span>
                 <span class="answer-badge" id="player1-result-answer"
                   >خدعة</span
                 >
-              </div>
-              <div class="result-time">
-                <span class="time-label">الوقت:</span>
-                <span id="player1-result-time">2.3</span> ثانية
               </div>
               <div class="result-points">
                 <span class="points-earned" id="player1-points-earned">+0</span>
@@ -138,22 +126,12 @@
           </div>
 
           <div class="player-result" id="player2-result">
-            <div class="podium-container">
-              <div class="podium" data-rank="1">
-                <div class="player-icon-large">👤</div>
-                <div class="player-name-large">اللاعب 2</div>
-              </div>
-            </div>
+            <div class="player-name-large">اللاعب 2</div>
             <div class="result-info">
               <div class="result-answer">
-                <span class="answer-label">الإجابة:</span>
                 <span class="answer-badge" id="player2-result-answer"
                   >حقيقة</span
                 >
-              </div>
-              <div class="result-time">
-                <span class="time-label">الوقت:</span>
-                <span id="player2-result-time">1.8</span> ثانية
               </div>
               <div class="result-points">
                 <span class="points-earned" id="player2-points-earned"
@@ -166,7 +144,6 @@
 
         <!-- Leaderboard -->
         <div class="leaderboard">
-          <h3 class="leaderboard-title">الترتيب الحالي</h3>
           <div class="leaderboard-bars">
             <div class="leaderboard-row">
               <span class="player-name-lb">اللاعب 1</span>
@@ -201,10 +178,9 @@
       <!-- Final Results Screen -->
       <div id="final-screen" class="screen hidden">
         <div class="content-center">
-          <h1 class="game-title">🎉 انتهت اللعبة! 🎉</h1>
+          <h1 class="game-title">🎉 انتهت اللعبة 🎉</h1>
 
           <div class="winner-announcement">
-            <div class="winner-label">الفائز</div>
             <div class="winner-name" id="winner-name">اللاعب 2</div>
             <div class="winner-icon">👑</div>
           </div>
@@ -214,13 +190,11 @@
             <div class="final-score-card">
               <div class="player-name-final">اللاعب 1</div>
               <div class="final-score-value" id="player1-final-score">450</div>
-              <div class="final-rank">المركز الثاني</div>
             </div>
 
             <div class="final-score-card winner">
               <div class="player-name-final">اللاعب 2</div>
               <div class="final-score-value" id="player2-final-score">650</div>
-              <div class="final-rank">المركز الأول</div>
             </div>
           </div>
 
