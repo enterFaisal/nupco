@@ -1,0 +1,73 @@
+body {
+  font-family: "Cairo", sans-serif;
+  background: var(--bg) url("../shared/bg-1080x1920.svg") center/cover no-repeat fixed;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.wrap {
+  min-height: 100dvh;
+  padding-top: calc(var(--header-h) + var(--safe-top) + 14px);
+  padding-right: max(12px, var(--safe-right));
+  padding-left: max(12px, var(--safe-left));
+  padding-bottom: max(16px, var(--safe-bottom));
+  display: grid;
+  place-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+/* Warning Message */
+.warning-container {
+    background: rgba(227, 21, 28, 0.8);
+    border: 3px solid var(--accent-2);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    animation: pulse 1.5s infinite;
+    width: min(760px, 94vw);
+}
+
+.warning-container h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.warning-container p {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    color: #fff;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(227, 21, 28, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 20px rgba(227, 21, 28, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(227, 21, 28, 0);
+    }
+}
+
+
+/* QR Code Page */
+#qrcode {
+    background: white;
+    padding: 16px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 1rem;
+}
+
+#qrcode + p {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
