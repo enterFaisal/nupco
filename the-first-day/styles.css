@@ -71,3 +71,15 @@ body {
     font-size: 1.2rem;
     font-weight: 600;
 }
+
+#tap-to-start {
+  cursor: pointer;
+  padding: 2rem;
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}

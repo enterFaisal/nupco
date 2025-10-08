@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>You've Been Phished!</title>
-    <link rel="stylesheet" href="../shared/shared.css">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="../shared/shared.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <header class="brand-header">
-        <img src="../shared/logo.svg" alt="NUPCO Logo" />
-        <img src="../shared/slogan.svg" alt="Slogan" />
+      <img src="../shared/logo.svg" alt="NUPCO Logo" />
+      <img src="../shared/slogan.svg" alt="Slogan" />
     </header>
     <main class="wrap">
-        <div class="warning-container">
-            <h1>You've been phished!</h1>
-            <p>A simple scan can compromise your data. Always be vigilant. Awareness is your first line of defense.</p>
-        </div>
+      <div id="tap-to-start">
+        <p>Tap to reveal your message</p>
+      </div>
+      <div class="warning-container hidden">
+        <h1>You've been phished!</h1>
+        <p>
+          A simple scan can compromise your data. Always be vigilant. Awareness
+          is your first line of defense.
+        </p>
+      </div>
     </main>
-    <audio id="alarm-sound" src="alarm.mp3" autoplay></audio>
+    <audio id="alarm-sound" src="alarm.mp3"></audio>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

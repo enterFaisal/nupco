@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Scan the QR Code</title>
-    <link rel="stylesheet" href="../shared/shared.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../shared/shared.css" />
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <header class="brand-header">
-        <img src="../shared/logo.svg" alt="NUPCO Logo" />
-        <img src="../shared/slogan.svg" alt="Slogan" />
+      <img src="../shared/logo.svg" alt="NUPCO Logo" />
+      <img src="../shared/slogan.svg" alt="Slogan" />
     </header>
     <main class="wrap">
-        <div id="qrcode"></div>
-        <p>To see what's in your delivery, please scan this code.</p>
+      <div id="qrcode"></div>
+      <p>To see what's in your delivery, please scan this code.</p>
     </main>
     <script>
-        new QRCode(document.getElementById("qrcode"), {
-            text: window.location.href.replace("qr.html", "index.html"),
-            width: 256,
-            height: 256,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
+      new QRCode(document.getElementById("qrcode"), {
+        text: window.location.href.replace("qr.html", "index.html"),
+        width: 256,
+        height: 256,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
     </script>
-</body>
+  </body>
 </html>

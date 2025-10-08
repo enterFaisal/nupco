@@ -1,16 +1,20 @@
-// This script is intentionally left blank for now.
-// It's here to make the <script> tag in index.html valid.
-// We will add code to play the alarm sound here later.
-document.addEventListener('DOMContentLoaded', (event) => {
-    const audio = document.getElementById('alarm-sound');
-    audio.play().catch(error => {
-        console.log('Autoplay was prevented:', error);
-        // Show a button to let the user play the sound manually.
-        const button = document.createElement('button');
-        button.textContent = 'Play Sound';
-        button.addEventListener('click', () => {
-            audio.play();
-        });
-        document.body.appendChild(button);
+document.addEventListener("DOMContentLoaded", () => {
+  const audio = document.getElementById("alarm-sound");
+  const tapToStart = document.getElementById("tap-to-start");
+  const warningContainer = document.querySelector(".warning-container");
+
+  function startExperience() {
+    // Play the audio
+    audio.play().catch((error) => {
+      console.log("Audio play failed:", error);
     });
+
+    // Show the warning message
+    tapToStart.classList.add("hidden");
+    warningContainer.classList.remove("hidden");
+  }
+
+  // Use 'touchend' for mobile and 'click' for desktop
+  tapToStart.addEventListener("click", startExperience);
+  tapToStart.addEventListener("touchend", startExperience);
 });
