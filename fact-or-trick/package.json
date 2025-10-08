@@ -1,0 +1,32 @@
+{
+  "name": "fact-or-trick",
+  "version": "1.0.0",
+  "description": "Fast-paced two-player cybersecurity quiz game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "tunnel": "cloudflared tunnel --url http://localhost:3000"
+  },
+  "keywords": [
+    "quiz",
+    "game",
+    "websocket",
+    "cybersecurity"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
+    "qrcode": "^1.5.3",
+    "socket.io": "^4.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  }
+}

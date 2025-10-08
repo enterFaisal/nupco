@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>حقيقة أم خدعة - جهاز التحكم</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="controller.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="mobile-header">
+      <img src="logo.svg" alt="نوبكو" class="mobile-logo" />
+    </header>
+
+    <!-- Connecting Screen -->
+    <div id="connecting-screen" class="screen">
+      <div class="status-container">
+        <div class="spinner"></div>
+        <h2 class="status-title">جارٍ الاتصال...</h2>
+        <p class="status-text">يرجى الانتظار</p>
+      </div>
+    </div>
+
+    <!-- Waiting Screen -->
+    <div id="waiting-screen" class="screen hidden">
+      <div class="status-container">
+        <div class="player-badge" id="player-badge">
+          <div class="badge-icon">👤</div>
+          <div class="badge-text" id="player-name">اللاعب 1</div>
+        </div>
+        <h2 class="status-title">متصل بنجاح!</h2>
+        <p class="status-text">انتظر حتى يبدأ المضيف اللعبة...</p>
+        <div class="waiting-animation">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Screen -->
+    <div id="question-screen" class="screen hidden">
+      <div class="question-info">
+        <div class="round-indicator">
+          <span>السؤال </span>
+          <span id="round-num">1</span>
+          <span> من </span>
+          <span id="total-rounds">10</span>
+        </div>
+        <div class="score-indicator">
+          النقاط: <span id="player-score">0</span>
+        </div>
+      </div>
+
+      <div class="question-display">
+        <div class="question-label">حقيقة أم خدعة؟</div>
+        <div class="question-statement" id="question-text">
+          يتم تحميل السؤال...
+        </div>
+      </div>
+
+      <div class="answer-buttons">
+        <button id="fact-btn" class="answer-btn fact-btn">
+          <div class="btn-icon">✓</div>
+          <div class="btn-text">حقيقة</div>
+          <div class="btn-subtitle">FACT</div>
+        </button>
+
+        <button id="trick-btn" class="answer-btn trick-btn">
+          <div class="btn-icon">✗</div>
+          <div class="btn-text">خدعة</div>
+          <div class="btn-subtitle">TRICK</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Answered Screen -->
+    <div id="answered-screen" class="screen hidden">
+      <div class="status-container">
+        <div class="answer-feedback" id="answer-feedback">
+          <div class="feedback-icon" id="feedback-icon">✓</div>
+          <h2 class="feedback-title" id="feedback-title">تم إرسال إجابتك!</h2>
+          <div class="answer-badge" id="your-answer-badge">
+            <span class="answer-label">إجابتك:</span>
+            <span class="answer-value" id="your-answer">حقيقة</span>
+          </div>
+          <p class="feedback-text">انتظر النتيجة على الشاشة الرئيسية...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="result-screen" class="screen hidden">
+      <div class="result-container">
+        <div class="result-status" id="result-status">
+          <div class="result-icon" id="result-icon">🎉</div>
+          <h2 class="result-title" id="result-title">إجابة صحيحة!</h2>
+        </div>
+
+        <div class="result-details">
+          <div class="result-row">
+            <span class="result-label">الإجابة الصحيحة:</span>
+            <span class="result-value correct" id="correct-answer-display"
+              >حقيقة</span
+            >
+          </div>
+          <div class="result-row">
+            <span class="result-label">إجابتك:</span>
+            <span class="result-value" id="your-answer-display">حقيقة</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">الوقت:</span>
+            <span class="result-value" id="your-time-display">2.3 ثانية</span>
+          </div>
+          <div class="result-row points">
+            <span class="result-label">النقاط المكتسبة:</span>
+            <span class="result-value earned" id="points-earned-display"
+              >+150</span
+            >
+          </div>
+        </div>
+
+        <div class="total-score-display">
+          <div class="total-label">النقاط الإجمالية</div>
+          <div class="total-value" id="total-score-display">450</div>
+        </div>
+
+        <p class="next-round-text">استعد للسؤال التالي...</p>
+      </div>
+    </div>
+
+    <!-- Final Screen -->
+    <div id="final-screen" class="screen hidden">
+      <div class="final-container">
+        <h1 class="final-title">انتهت اللعبة!</h1>
+
+        <div class="final-result" id="final-result">
+          <div class="final-icon" id="final-icon">👑</div>
+          <div class="final-message" id="final-message">فزت!</div>
+        </div>
+
+        <div class="final-score-box">
+          <div class="final-score-label">نقاطك النهائية</div>
+          <div class="final-score-value" id="final-score-value">650</div>
+        </div>
+
+        <p class="final-text">شكراً لمشاركتك!</p>
+        <p class="final-text-small">انتظر اللعبة القادمة...</p>
+      </div>
+    </div>
+
+    <!-- Disconnected Screen -->
+    <div id="disconnected-screen" class="screen hidden">
+      <div class="status-container">
+        <div class="error-icon">⚠️</div>
+        <h2 class="status-title">انقطع الاتصال</h2>
+        <p class="status-text">تم فقدان الاتصال بالخادم</p>
+        <button id="reconnect-btn" class="btn primary">إعادة الاتصال</button>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="controller.js"></script>
+  </body>
+</html>

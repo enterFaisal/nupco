@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>حقيقة أم خدعة - الشاشة الرئيسية</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="host.css" />
+  </head>
+  <body>
+    <!-- Fixed brand header -->
+    <header class="brand-header" aria-label="الشريط العلوي">
+      <img class="brand-left" src="logo.svg" alt="شعار نوبكو" />
+      <img class="brand-right" src="slogan.svg" alt="شعار الحملة" />
+    </header>
+
+    <!-- Main game container -->
+    <main class="game-wrap">
+      <!-- Waiting Screen: QR Code -->
+      <div id="waiting-screen" class="screen">
+        <div class="content-center">
+          <h1 class="game-title">حقيقة أم خدعة</h1>
+          <p class="subtitle">امسح رمز QR للانضمام إلى اللعبة</p>
+
+          <!-- Horizontal layout: Player 1 - QR - Player 2 -->
+          <div class="waiting-layout">
+            <!-- Player 1 on left -->
+            <div class="player-slot" id="player1-slot">
+              <div class="player-icon">👤</div>
+              <div class="player-label">اللاعب 1</div>
+              <div class="status-indicator waiting"></div>
+            </div>
+
+            <!-- QR code in middle (lower position) -->
+            <div class="qr-wrapper">
+              <div class="vs-divider">VS</div>
+              <div class="qr-container">
+                <canvas id="qr-canvas"></canvas>
+              </div>
+            </div>
+
+            <!-- Player 2 on right -->
+            <div class="player-slot" id="player2-slot">
+              <div class="player-icon">👤</div>
+              <div class="player-label">اللاعب 2</div>
+              <div class="status-indicator waiting"></div>
+            </div>
+          </div>
+
+          <button id="start-game-btn" class="btn primary hidden">
+            ابدأ اللعبة
+          </button>
+        </div>
+      </div>
+
+      <!-- Question Screen -->
+      <div id="question-screen" class="screen hidden">
+        <div class="hud">
+          <div class="pill">
+            السؤال <span id="round-number">1</span> من
+            <span id="total-rounds">10</span>
+          </div>
+          <div class="pill timer-pill">
+            <span id="timer">10</span>
+            <span class="timer-label">ثانية</span>
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-text" id="question-text">
+            هل هذه حقيقة أم خدعة؟
+          </div>
+        </div>
+
+        <!-- Player Answer Status -->
+        <div class="player-answers">
+          <div class="player-answer-box" id="player1-answer">
+            <div class="player-name">اللاعب 1</div>
+            <div class="answer-status waiting">⏱️ في الانتظار...</div>
+            <div class="score-display">
+              النقاط: <span id="player1-score">0</span>
+            </div>
+          </div>
+
+          <div class="player-answer-box" id="player2-answer">
+            <div class="player-name">اللاعب 2</div>
+            <div class="answer-status waiting">⏱️ في الانتظار...</div>
+            <div class="score-display">
+              النقاط: <span id="player2-score">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Screen -->
+      <div id="results-screen" class="screen hidden">
+        <h2 class="results-title">نتائج السؤال</h2>
+
+        <div class="correct-answer-card">
+          <div class="answer-label">الإجابة الصحيحة:</div>
+          <div class="answer-value" id="correct-answer">حقيقة</div>
+        </div>
+
+        <!-- Results Comparison -->
+        <div class="results-comparison">
+          <div class="player-result" id="player1-result">
+            <div class="podium-container">
+              <div class="podium" data-rank="2">
+                <div class="player-icon-large">👤</div>
+                <div class="player-name-large">اللاعب 1</div>
+              </div>
+            </div>
+            <div class="result-info">
+              <div class="result-answer">
+                <span class="answer-label">الإجابة:</span>
+                <span class="answer-badge" id="player1-result-answer"
+                  >خدعة</span
+                >
+              </div>
+              <div class="result-time">
+                <span class="time-label">الوقت:</span>
+                <span id="player1-result-time">2.3</span> ثانية
+              </div>
+              <div class="result-points">
+                <span class="points-earned" id="player1-points-earned">+0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="player-result" id="player2-result">
+            <div class="podium-container">
+              <div class="podium" data-rank="1">
+                <div class="player-icon-large">👤</div>
+                <div class="player-name-large">اللاعب 2</div>
+              </div>
+            </div>
+            <div class="result-info">
+              <div class="result-answer">
+                <span class="answer-label">الإجابة:</span>
+                <span class="answer-badge" id="player2-result-answer"
+                  >حقيقة</span
+                >
+              </div>
+              <div class="result-time">
+                <span class="time-label">الوقت:</span>
+                <span id="player2-result-time">1.8</span> ثانية
+              </div>
+              <div class="result-points">
+                <span class="points-earned" id="player2-points-earned"
+                  >+150</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard">
+          <h3 class="leaderboard-title">الترتيب الحالي</h3>
+          <div class="leaderboard-bars">
+            <div class="leaderboard-row">
+              <span class="player-name-lb">اللاعب 1</span>
+              <div class="score-bar-container">
+                <div
+                  class="score-bar"
+                  id="player1-score-bar"
+                  style="width: 60%"
+                ></div>
+                <span class="score-value" id="player1-total-score">450</span>
+              </div>
+            </div>
+            <div class="leaderboard-row">
+              <span class="player-name-lb">اللاعب 2</span>
+              <div class="score-bar-container">
+                <div
+                  class="score-bar"
+                  id="player2-score-bar"
+                  style="width: 80%"
+                ></div>
+                <span class="score-value" id="player2-total-score">600</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="next-question-timer">
+          السؤال التالي في <span id="next-timer">3</span> ثواني...
+        </div>
+      </div>
+
+      <!-- Final Results Screen -->
+      <div id="final-screen" class="screen hidden">
+        <div class="content-center">
+          <h1 class="game-title">🎉 انتهت اللعبة! 🎉</h1>
+
+          <div class="winner-announcement">
+            <div class="winner-label">الفائز</div>
+            <div class="winner-name" id="winner-name">اللاعب 2</div>
+            <div class="winner-icon">👑</div>
+          </div>
+
+          <!-- Final Scores -->
+          <div class="final-scores">
+            <div class="final-score-card">
+              <div class="player-name-final">اللاعب 1</div>
+              <div class="final-score-value" id="player1-final-score">450</div>
+              <div class="final-rank">المركز الثاني</div>
+            </div>
+
+            <div class="final-score-card winner">
+              <div class="player-name-final">اللاعب 2</div>
+              <div class="final-score-value" id="player2-final-score">650</div>
+              <div class="final-rank">المركز الأول</div>
+            </div>
+          </div>
+
+          <button id="new-game-btn" class="btn primary">لعبة جديدة</button>
+        </div>
+      </div>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- QR Code is now generated server-side, no CDN needed! -->
+    <script src="host.js"></script>
+  </body>
+</html>
