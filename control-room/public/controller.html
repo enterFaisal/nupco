@@ -45,32 +45,33 @@
 
       /* Main content */
       .wrap {
-        min-height: 100dvh;
-        padding-top: calc(var(--header-h) + var(--safe-top) + 20px);
-        padding-right: max(20px, var(--safe-right));
-        padding-left: max(20px, var(--safe-left));
-        padding-bottom: max(30px, var(--safe-bottom));
+        height: 100dvh;
+        padding-top: calc(var(--header-h) + var(--safe-top) + 15px);
+        padding-right: max(15px, var(--safe-right));
+        padding-left: max(15px, var(--safe-left));
+        padding-bottom: max(15px, var(--safe-bottom));
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 12px;
+        overflow: hidden;
       }
 
       /* Title section */
       .title-section {
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 0;
       }
 
       .title-section h1 {
-        font-size: clamp(2rem, 6vw, 3rem);
+        font-size: clamp(1.5rem, 5vw, 2.2rem);
         font-weight: 800;
         color: var(--accent);
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.3rem;
         text-shadow: 0 2px 10px rgba(224, 110, 14, 0.3);
       }
 
       .title-section p {
-        font-size: clamp(1rem, 3vw, 1.3rem);
+        font-size: clamp(0.9rem, 2.5vw, 1.1rem);
         color: var(--ink);
         opacity: 0.9;
       }
@@ -80,7 +81,7 @@
         background: rgba(42, 47, 87, 0.9);
         border: 2px solid var(--accent);
         border-radius: var(--radius);
-        padding: 15px 20px;
+        padding: 10px 15px;
         text-align: center;
         backdrop-filter: blur(10px);
         box-shadow: var(--shadow);
@@ -97,8 +98,8 @@
       .status-indicator {
         display: inline-flex;
         align-items: center;
-        gap: 10px;
-        font-size: 1.1rem;
+        gap: 8px;
+        font-size: 0.95rem;
         font-weight: 600;
       }
 
@@ -128,9 +129,10 @@
       /* Control buttons grid */
       .controls-grid {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
         margin-top: 10px;
+        flex: 1;
       }
 
       /* Control button */
@@ -138,9 +140,9 @@
         background: linear-gradient(135deg, var(--card) 0%, #1e2548 100%);
         border: 3px solid var(--accent);
         border-radius: var(--radius);
-        padding: 30px 20px;
+        padding: 15px 10px;
         font-family: "Cairo", sans-serif;
-        font-size: clamp(1.3rem, 4vw, 1.8rem);
+        font-size: clamp(1rem, 3.5vw, 1.4rem);
         font-weight: 800;
         color: #fff;
         cursor: pointer;
@@ -148,12 +150,12 @@
         box-shadow: var(--shadow);
         position: relative;
         overflow: hidden;
-        min-height: 100px;
+        min-height: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
         text-align: center;
       }
 
@@ -213,21 +215,26 @@
 
       /* Button icon */
       .btn-icon {
-        font-size: 2.5rem;
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+      }
+
+      /* Full width button */
+      .control-btn.full-width {
+        grid-column: 1 / -1;
       }
 
       /* Feedback message */
       .feedback {
         position: fixed;
-        bottom: 30px;
+        bottom: 20px;
         left: 50%;
         transform: translateX(-50%) translateY(100px);
         background: rgba(42, 47, 87, 0.95);
         border: 2px solid var(--accent);
         border-radius: var(--radius);
-        padding: 15px 30px;
+        padding: 12px 25px;
         font-weight: 600;
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         z-index: 100;
         opacity: 0;
         transition: all 0.3s ease;
@@ -250,34 +257,6 @@
       .feedback.error {
         border-color: var(--accent-2);
         color: var(--accent-2);
-      }
-
-      /* Instructions */
-      .instructions {
-        background: rgba(42, 47, 87, 0.6);
-        border-radius: var(--radius);
-        padding: 20px;
-        margin-top: 10px;
-        text-align: center;
-        backdrop-filter: blur(5px);
-      }
-
-      .instructions h3 {
-        color: var(--accent);
-        font-size: 1.3rem;
-        margin-bottom: 10px;
-      }
-
-      .instructions ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .instructions li {
-        margin: 8px 0;
-        font-size: 0.95rem;
-        opacity: 0.9;
       }
     </style>
   </head>
@@ -307,27 +286,27 @@
       <div class="controls-grid">
         <button class="control-btn video-1" id="playVideo1Btn" disabled>
           <span class="btn-icon">▶️</span>
-          <span>تشغيل الفيديو - الجزء الأول</span>
+          <span>الجزء الأول</span>
         </button>
 
         <button class="control-btn video-2" id="playVideo2Btn" disabled>
           <span class="btn-icon">▶️</span>
-          <span>تشغيل الفيديو - الجزء الثاني</span>
-        </button>
-
-        <button class="control-btn stop" id="stopVideoBtn" disabled>
-          <span class="btn-icon">⏹️</span>
-          <span>إيقاف الفيديو</span>
+          <span>الجزء الثاني</span>
         </button>
 
         <button class="control-btn alarm" id="playAlarmBtn" disabled>
           <span class="btn-icon">🚨</span>
-          <span>تشغيل صوت الإنذار</span>
+          <span>تشغيل الإنذار</span>
         </button>
 
         <button class="control-btn stop" id="stopAlarmBtn" disabled>
-          <span class="btn-icon">🔇</span>
-          <span>إيقاف صوت الإنذار</span>
+          <span class="btn-icon">🛑</span>
+          <span>إيقاف الإنذار</span>
+        </button>
+
+        <button class="control-btn stop full-width" id="stopVideoBtn" disabled>
+          <span class="btn-icon">⏹️</span>
+          <span>إيقاف الفيديو</span>
         </button>
       </div>
 
