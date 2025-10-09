@@ -12,6 +12,9 @@ const io = new Server(httpServer);
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
+// Serve video files from the 'video' folder
+app.use("/video", express.static(path.join(__dirname, "video")));
+
 // Routes
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "display.html"));

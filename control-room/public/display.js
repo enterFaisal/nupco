@@ -10,10 +10,10 @@ const standbyScreen = document.getElementById("standbyScreen");
 const videoPlayer = document.getElementById("videoPlayer");
 const videoSource = document.getElementById("videoSource");
 const alarmSound = document.getElementById("alarmSound");
-const qrSection = document.getElementById("qrSection");
-const qrCode = document.getElementById("qrCode");
+const clickToStartOverlay = document.getElementById("clickToStartOverlay");
 
 let isConnected = false;
+let userInteracted = false;
 
 // Video paths - THESE SHOULD BE UPDATED WITH ACTUAL VIDEO PATHS
 const VIDEO_PATHS = {
@@ -30,9 +30,6 @@ function init() {
 
   // Setup video event listeners
   setupVideoListeners();
-
-  // Generate QR code for controller access
-  generateQRCode();
 }
 
 // Setup video event listeners
@@ -58,24 +55,6 @@ function setupVideoListeners() {
     console.log("Video paused");
     sendStatus("video-paused");
   });
-}
-
-// Generate QR code for controller access
-async function generateQRCode() {
-  try {
-    // Get controller URL
-    const protocol = window.location.protocol;
-    const host = window.location.host;
-    const controllerUrl = `${protocol}//${host}/controller`;
-
-    // Request QR code from server
-    const qrImageUrl = `/api/qrcode?url=${encodeURIComponent(controllerUrl)}`;
-    qrCode.src = qrImageUrl;
-
-    console.log("QR code generated for:", controllerUrl);
-  } catch (error) {
-    console.error("QR code generation error:", error);
-  }
 }
 
 // Execute command from controller
@@ -178,13 +157,11 @@ function playAlarm() {
 // Show standby screen
 function showStandby() {
   standbyScreen.classList.remove("hidden");
-  qrSection.classList.remove("hidden");
 }
 
 // Hide standby screen
 function hideStandby() {
   standbyScreen.classList.add("hidden");
-  qrSection.classList.add("hidden");
 }
 
 // Send status update to server
@@ -236,40 +213,46 @@ socket.on("connect_error", (error) => {
 });
 
 // Enable autoplay and fullscreen on first user interaction
-let userInteracted = false;
-
 function enableAutoplay() {
   if (!userInteracted) {
     userInteracted = true;
     console.log("User interaction detected - autoplay enabled");
-    
+
+    // Hide the click-to-start overlay
+    clickToStartOverlay.classList.add("hidden");
+
     // Try to play and immediately pause to unlock autoplay
-    videoPlayer.play().then(() => {
-      videoPlayer.pause();
-    }).catch(() => {
-      console.log("Autoplay unlock attempt");
-    });
-    
-    alarmSound.play().then(() => {
-      alarmSound.pause();
-      alarmSound.currentTime = 0;
-    }).catch(() => {
-      console.log("Audio unlock attempt");
-    });
-  }
-  
-  // Request fullscreen
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen().catch((err) => {
-      console.log("Fullscreen request failed:", err);
-    });
+    videoPlayer
+      .play()
+      .then(() => {
+        videoPlayer.pause();
+      })
+      .catch(() => {
+        console.log("Autoplay unlock attempt");
+      });
+
+    alarmSound
+      .play()
+      .then(() => {
+        alarmSound.pause();
+        alarmSound.currentTime = 0;
+      })
+      .catch(() => {
+        console.log("Audio unlock attempt");
+      });
+
+    // Request fullscreen
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.log("Fullscreen request failed:", err);
+      });
+    }
   }
 }
 
-// Listen for any user interaction
-document.addEventListener("click", enableAutoplay, { once: true });
-document.addEventListener("keydown", enableAutoplay, { once: true });
-document.addEventListener("touchstart", enableAutoplay, { once: true });
+// Listen for any user interaction on the overlay
+clickToStartOverlay.addEventListener("click", enableAutoplay);
+clickToStartOverlay.addEventListener("touchstart", enableAutoplay);
 
 // Prevent screen from sleeping
 if ("wakeLock" in navigator) {

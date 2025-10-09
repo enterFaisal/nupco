@@ -127,56 +127,77 @@
         }
       }
 
-      /* QR Code section for easy mobile access */
-      .qr-section {
-        position: fixed;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(255, 255, 255, 0.95);
-        padding: 20px;
-        border-radius: var(--radius);
-        text-align: center;
-        z-index: 999;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      }
-
-      .qr-section.hidden {
-        display: none;
-      }
-
-      .qr-section img {
-        display: block;
-        margin: 0 auto 10px;
-      }
-
-      .qr-section p {
-        margin: 0;
-        color: var(--bg);
-        font-weight: 600;
-        font-size: 1rem;
-      }
-
       /* Audio element (hidden) */
       #alarmSound {
         display: none;
       }
+
+      /* Click to Start Overlay */
+      .click-to-start-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        cursor: pointer;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .click-to-start-overlay.hidden {
+        display: none;
+      }
+
+      .click-to-start-content {
+        text-align: center;
+        color: white;
+        animation: pulse 2s infinite;
+      }
+
+      .click-to-start-content h1 {
+        font-size: clamp(2rem, 8vw, 5rem);
+        margin-bottom: 1rem;
+        color: var(--accent);
+      }
+
+      .click-to-start-content p {
+        font-size: clamp(1rem, 3vw, 2rem);
+        opacity: 0.8;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
     </style>
   </head>
   <body>
+    <!-- Click to Start Overlay -->
+    <div class="click-to-start-overlay" id="clickToStartOverlay">
+      <div class="click-to-start-content">
+        <h1>👆 اضغط للبدء</h1>
+        <p>انقر في أي مكان لتفعيل الفيديو والصوت</p>
+      </div>
+    </div>
+
     <div class="fullscreen-container">
       <!-- Standby screen -->
       <div class="standby-screen" id="standbyScreen">
         <img src="shared/logo.svg" alt="NUPCO Logo" />
         <h1>غرفة السيطرة</h1>
         <p>في انتظار الأوامر من جهاز التحكم...</p>
-        <p style="margin-top: 2rem; font-size: 1.2rem; opacity: 0.6;">
-          👆 اضغط في أي مكان لتفعيل التحكم الكامل
-        </p>
       </div>
 
       <!-- Video player -->
-      <video id="videoPlayer" controls>
+      <video id="videoPlayer">
         <source id="videoSource" src="" type="video/mp4" />
         متصفحك لا يدعم تشغيل الفيديو.
       </video>
@@ -186,12 +207,6 @@
     <div class="connection-status" id="connectionStatus">
       <span class="status-dot"></span>
       <span id="statusText">غير متصل</span>
-    </div>
-
-    <!-- QR Code for controller access -->
-    <div class="qr-section" id="qrSection">
-      <img id="qrCode" src="" alt="QR Code" />
-      <p>امسح للوصول إلى جهاز التحكم</p>
     </div>
 
     <!-- Audio element for alarm sound -->
