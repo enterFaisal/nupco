@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة التحكم - NUPCO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/shared/shared.css" />
+    <link rel="stylesheet" href="/launcher/launcher.css" />
+  </head>
+  <body>
+    <!-- Brand Header -->
+    <header class="brand-header">
+      <img src="/shared/logo.svg" alt="NUPCO" />
+      <img src="/shared/slogan.svg" alt="شعار" />
+    </header>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title">🎮 لوحة التحكم الرئيسية</h1>
+        <p class="dashboard-instruction">
+          اختر النشاط لعرضه على الشاشة الرئيسية
+        </p>
+      </div>
+
+      <!-- Activity Grid -->
+      <div class="activity-grid">
+        <!-- عجلة التوعية -->
+        <button class="activity-card" data-activity="wheel" data-url="/wheel">
+          <div class="activity-icon">🎡</div>
+          <h2 class="activity-title">عجلة التوعية</h2>
+          <div class="activity-badge">ثابت</div>
+        </button>
+
+        <!-- صيد التصيد -->
+        <button
+          class="activity-card"
+          data-activity="phishing"
+          data-url="/phishing"
+        >
+          <div class="activity-icon">🎣</div>
+          <h2 class="activity-title">صيد التصيد</h2>
+          <div class="activity-badge">ثابت</div>
+        </button>
+
+        <!-- حقيقة أم خدعة -->
+        <button
+          class="activity-card"
+          data-activity="fact-or-trick"
+          data-url="/fact-or-trick"
+        >
+          <div class="activity-icon">🎮</div>
+          <h2 class="activity-title">حقيقة أم خدعة</h2>
+          <div class="activity-badge interactive">تفاعلي</div>
+        </button>
+
+        <!-- اليوم الأول -->
+        <button
+          class="activity-card"
+          data-activity="first-day"
+          data-url="/first-day"
+        >
+          <div class="activity-icon">👋</div>
+          <h2 class="activity-title">اليوم الأول</h2>
+          <div class="activity-badge">ثابت</div>
+        </button>
+
+        <!-- غرفة التحكم -->
+        <button
+          class="activity-card"
+          data-activity="control-room"
+          data-url="/control-room"
+        >
+          <div class="activity-icon">🎛️</div>
+          <h2 class="activity-title">غرفة التحكم</h2>
+          <div class="activity-badge interactive">تفاعلي</div>
+        </button>
+      </div>
+
+
+
+    <!-- نافذة خيارات العرض -->
+    <div class="modal hidden" id="launch-modal">
+      <div class="modal-content">
+        <button class="close" id="close-modal">&times;</button>
+        <h2 class="modal-title">خيارات العرض</h2>
+        <p class="modal-description">اختر كيف تريد عرض النشاط</p>
+        <div class="modal-buttons">
+          <button class="btn primary" id="launch-fullscreen">
+            <span class="btn-icon">🖥️</span>
+            <span>ملء الشاشة</span>
+          </button>
+          <button class="btn secondary" id="launch-window">
+            <span class="btn-icon">🪟</span>
+            <span>نافذة جديدة</span>
+          </button>
+          <button class="btn ghost" id="launch-tab">
+            <span class="btn-icon">📑</span>
+            <span>تبويب جديد</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/launcher/launcher.js"></script>
+  </body>
+</html>

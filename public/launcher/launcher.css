@@ -1,0 +1,389 @@
+/* ========================================
+   لوحة التحكم NUPCO - محاذاة مع النمط المشترك
+======================================== */
+
+.hidden {
+  display: none !important;
+}
+
+/* ========================================
+   حاوية اللوحة الرئيسية
+======================================== */
+.dashboard-container {
+  min-height: 100dvh;
+  padding-top: calc(var(--header-h) + var(--safe-top) + 14px);
+  padding-right: max(20px, var(--safe-right));
+  padding-left: max(20px, var(--safe-left));
+  padding-bottom: max(24px, var(--safe-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* ========================================
+   رأس اللوحة
+======================================== */
+.dashboard-header {
+  text-align: center;
+  padding: 24px 20px;
+  background: rgba(42, 47, 87, 0.6);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  max-width: 900px;
+  width: 100%;
+}
+
+.dashboard-title {
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+}
+
+.dashboard-instruction {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--ink);
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* ========================================
+   شبكة الأنشطة
+======================================== */
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.activity-card {
+  background: rgba(42, 47, 87, 0.7);
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  font-family: inherit;
+  color: inherit;
+  min-height: 240px;
+}
+
+.activity-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.activity-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--accent);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(224, 110, 14, 0.3);
+}
+
+.activity-card:hover::before {
+  opacity: 0.15;
+}
+
+.activity-card:active {
+  transform: translateY(-4px) scale(0.98);
+}
+
+.activity-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.activity-icon {
+  font-size: clamp(3.5rem, 7vw, 4.5rem);
+  line-height: 1;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+}
+
+.activity-title {
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0;
+}
+
+.activity-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(76, 175, 80, 0.25);
+  color: #70e000;
+  border: 2px solid #70e000;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.activity-badge.interactive {
+  background: rgba(224, 110, 14, 0.25);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ========================================
+   لوحة التعليمات
+======================================== */
+.instructions-panel {
+  background: rgba(42, 47, 87, 0.6);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.instruction-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.instruction-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(-4px);
+}
+
+.instruction-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.instruction-text {
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ========================================
+   شريط الحالة
+======================================== */
+.status-bar {
+  background: rgba(42, 47, 87, 0.6);
+  border-radius: var(--radius);
+  padding: 18px 28px;
+  box-shadow: var(--shadow);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  max-width: 900px;
+  width: 100%;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.status-value {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--accent);
+  padding: 6px 16px;
+  background: rgba(224, 110, 14, 0.15);
+  border-radius: 8px;
+}
+
+.status-value.active {
+  color: #70e000;
+  background: rgba(112, 224, 0, 0.15);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* ========================================
+   النافذة المنبثقة
+======================================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  width: min(540px, 94vw);
+  background: var(--bg);
+  color: var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(24px, 3vw, 32px);
+  text-align: center;
+  position: relative;
+  animation: slideUp 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-title {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
+.modal-description {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 24px;
+}
+
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn-icon {
+  font-size: 1.4rem;
+}
+
+/* ========================================
+   التصميم المتجاوب
+======================================== */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: calc(var(--header-h) + var(--safe-top) + 10px) max(12px, var(--safe-right)) max(16px, var(--safe-bottom)) max(12px, var(--safe-left));
+    gap: 20px;
+  }
+
+  .dashboard-header {
+    padding: 20px 16px;
+  }
+
+  .activity-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .activity-card {
+    padding: 28px 20px;
+    min-height: 200px;
+  }
+
+  .instructions-panel {
+    padding: 20px;
+  }
+
+  .instruction-item {
+    padding: 12px;
+  }
+
+  .status-bar {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .modal-buttons {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-title {
+    font-size: 1.6rem;
+  }
+
+  .activity-icon {
+    font-size: 3rem;
+  }
+
+  .activity-title {
+    font-size: 1.2rem;
+  }
+}
+
+/* ========================================
+   للطباعة
+======================================== */
+@media print {
+  .brand-header,
+  .instructions-panel,
+  .status-bar {
+    display: none;
+  }
+
+  .activity-grid {
+    page-break-inside: avoid;
+  }
+}

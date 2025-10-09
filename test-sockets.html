@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket.IO Connection Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      h1 {
+        color: #1c2346;
+      }
+      .test-section {
+        background: white;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .status {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+      .connected {
+        background: #d4edda;
+        color: #155724;
+      }
+      .disconnected {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      button {
+        background: #1c2346;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background: #2d3561;
+      }
+      .log {
+        background: #f8f9fa;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        max-height: 200px;
+        overflow-y: auto;
+        font-family: monospace;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧪 Socket.IO Connection Test</h1>
+
+    <div class="test-section">
+      <h2>Control Room Namespace</h2>
+      <div id="control-status" class="status disconnected">Disconnected</div>
+      <button onclick="testControlRoom()">Test Control Room</button>
+      <button onclick="testControlRoomController()">Test Controller</button>
+      <div id="control-log" class="log"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Fact or Trick Namespace</h2>
+      <div id="fact-status" class="status disconnected">Disconnected</div>
+      <button onclick="testFactOrTrick()">Test Fact or Trick</button>
+      <button onclick="testFactOrTrickController()">Test Controller</button>
+      <div id="fact-log" class="log"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let controlSocket = null;
+      let factSocket = null;
+
+      function log(section, message) {
+        const logEl = document.getElementById(`${section}-log`);
+        const timestamp = new Date().toLocaleTimeString();
+        logEl.innerHTML += `[${timestamp}] ${message}<br>`;
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      function updateStatus(section, connected) {
+        const statusEl = document.getElementById(`${section}-status`);
+        if (connected) {
+          statusEl.textContent = "Connected ✅";
+          statusEl.className = "status connected";
+        } else {
+          statusEl.textContent = "Disconnected ❌";
+          statusEl.className = "status disconnected";
+        }
+      }
+
+      function testControlRoom() {
+        if (controlSocket) {
+          controlSocket.disconnect();
+        }
+
+        log("control", "Connecting to /control-room namespace...");
+
+        controlSocket = io("/control-room", {
+          path: "/control-room/socket.io/",
+        });
+
+        controlSocket.on("connect", () => {
+          log("control", `✅ Connected! Socket ID: ${controlSocket.id}`);
+          updateStatus("control", true);
+
+          // Register as display
+          controlSocket.emit("display:register");
+          log("control", "📡 Sent display:register");
+        });
+
+        controlSocket.on("display:registered", (data) => {
+          log("control", `✅ Display registered: ${JSON.stringify(data)}`);
+        });
+
+        controlSocket.on("disconnect", () => {
+          log("control", "❌ Disconnected");
+          updateStatus("control", false);
+        });
+
+        controlSocket.on("connect_error", (err) => {
+          log("control", `❌ Connection error: ${err.message}`);
+          updateStatus("control", false);
+        });
+      }
+
+      function testControlRoomController() {
+        if (controlSocket) {
+          controlSocket.disconnect();
+        }
+
+        log("control", "Connecting to /control-room as controller...");
+
+        controlSocket = io("/control-room", {
+          path: "/control-room/socket.io/",
+        });
+
+        controlSocket.on("connect", () => {
+          log("control", `✅ Connected! Socket ID: ${controlSocket.id}`);
+          updateStatus("control", true);
+
+          // Register as controller
+          controlSocket.emit("controller:register");
+          log("control", "📡 Sent controller:register");
+        });
+
+        controlSocket.on("controller:registered", (data) => {
+          log("control", `✅ Controller registered: ${JSON.stringify(data)}`);
+        });
+
+        controlSocket.on("disconnect", () => {
+          log("control", "❌ Disconnected");
+          updateStatus("control", false);
+        });
+
+        controlSocket.on("connect_error", (err) => {
+          log("control", `❌ Connection error: ${err.message}`);
+          updateStatus("control", false);
+        });
+      }
+
+      function testFactOrTrick() {
+        if (factSocket) {
+          factSocket.disconnect();
+        }
+
+        log("fact", "Connecting to /fact-or-trick namespace...");
+
+        factSocket = io("/fact-or-trick", {
+          path: "/fact-or-trick/socket.io/",
+        });
+
+        factSocket.on("connect", () => {
+          log("fact", `✅ Connected! Socket ID: ${factSocket.id}`);
+          updateStatus("fact", true);
+
+          // Init as host
+          factSocket.emit("host:init");
+          log("fact", "📡 Sent host:init");
+        });
+
+        factSocket.on("host:initialized", (data) => {
+          log("fact", `✅ Host initialized: ${JSON.stringify(data)}`);
+        });
+
+        factSocket.on("disconnect", () => {
+          log("fact", "❌ Disconnected");
+          updateStatus("fact", false);
+        });
+
+        factSocket.on("connect_error", (err) => {
+          log("fact", `❌ Connection error: ${err.message}`);
+          updateStatus("fact", false);
+        });
+      }
+
+      function testFactOrTrickController() {
+        if (factSocket) {
+          factSocket.disconnect();
+        }
+
+        log("fact", "Connecting to /fact-or-trick as player...");
+
+        factSocket = io("/fact-or-trick", {
+          path: "/fact-or-trick/socket.io/",
+        });
+
+        factSocket.on("connect", () => {
+          log("fact", `✅ Connected! Socket ID: ${factSocket.id}`);
+          updateStatus("fact", true);
+
+          // Join as player
+          factSocket.emit("player:join", { roomId: "TEST123" });
+          log("fact", "📡 Sent player:join with roomId: TEST123");
+        });
+
+        factSocket.on("player:joined", (data) => {
+          log("fact", `✅ Player joined: ${JSON.stringify(data)}`);
+        });
+
+        factSocket.on("player:error", (data) => {
+          log("fact", `⚠️ Player error: ${data.message}`);
+        });
+
+        factSocket.on("disconnect", () => {
+          log("fact", "❌ Disconnected");
+          updateStatus("fact", false);
+        });
+
+        factSocket.on("connect_error", (err) => {
+          log("fact", `❌ Connection error: ${err.message}`);
+          updateStatus("fact", false);
+        });
+      }
+
+      log("control", "Test page loaded. Click buttons to test connections.");
+      log("fact", "Test page loaded. Click buttons to test connections.");
+    </script>
+  </body>
+</html>

@@ -1,5 +1,15 @@
+// Determine the Socket.IO namespace and path based on current URL
+const currentPath = window.location.pathname;
+const namespace = currentPath.startsWith("/fact-or-trick")
+  ? "/fact-or-trick"
+  : "/";
+const socketPath =
+  namespace === "/fact-or-trick" ? "/fact-or-trick/socket.io/" : "/socket.io/";
+
 // Connect to Socket.IO
-const socket = io();
+const socket = io(namespace, {
+  path: socketPath,
+});
 
 // DOM Elements
 const connectingScreen = document.getElementById("connecting-screen");

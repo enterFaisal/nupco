@@ -1,7 +1,17 @@
 // Display client-side JavaScript
 // Receives commands from controllers and executes them
 
-const socket = io();
+// Determine the Socket.IO namespace and path based on current URL
+const currentPath = window.location.pathname;
+const namespace = currentPath.startsWith("/control-room")
+  ? "/control-room"
+  : "/";
+const socketPath =
+  namespace === "/control-room" ? "/control-room/socket.io/" : "/socket.io/";
+
+const socket = io(namespace, {
+  path: socketPath,
+});
 
 // UI Elements
 const connectionStatus = document.getElementById("connectionStatus");

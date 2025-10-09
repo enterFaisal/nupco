@@ -1,0 +1,544 @@
+require("dotenv").config();
+const express = require("express");
+const { Server } = require("socket.io");
+const QRCode = require("qrcode");
+const path = require("path");
+
+const app = express();
+
+// Serve static files
+app.use(express.static(path.join(__dirname, "public")));
+
+// Routes
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "host.html"));
+});
+
+app.get("/controller", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "controller.html"));
+});
+
+// QR Code API endpoint - generates QR code as PNG image
+app.get("/api/qrcode", async (req, res) => {
+  try {
+    const url = req.query.url;
+
+    if (!url) {
+      return res.status(400).json({ error: "URL parameter is required" });
+    }
+
+    // Generate QR code as PNG buffer (smaller size)
+    const qrCodeBuffer = await QRCode.toBuffer(url, {
+      width: 200,
+      margin: 2,
+      color: {
+        dark: "#1c2346",
+        light: "#ffffff",
+      },
+      type: "png",
+    });
+
+    res.setHeader("Content-Type", "image/png");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    res.send(qrCodeBuffer);
+  } catch (error) {
+    console.error("QR code generation error:", error);
+    res.status(500).json({ error: "Failed to generate QR code" });
+  }
+});
+
+// Cybersecurity questions database
+const questionsDatabase = [
+  {
+    question:
+      "تثبيت برنامج مكافحة الفيروسات يجعل جهازك محمياً بنسبة 100% من جميع التهديدات السيبرانية.",
+    answer: "trick",
+    explanation:
+      "خدعة! برامج مكافحة الفيروسات مهمة لكنها ليست حماية كاملة. يجب استخدام عدة طبقات أمنية.",
+  },
+  {
+    question:
+      "كلمات المرور القوية يجب أن تحتوي على مزيج من الأحرف الكبيرة والصغيرة والأرقام والرموز.",
+    answer: "fact",
+    explanation:
+      "حقيقة! كلمات المرور القوية والمعقدة تجعل اختراق حسابك أصعب بكثير.",
+  },
+  {
+    question:
+      "فتح مرفقات البريد الإلكتروني من مصادر غير معروفة آمن تماماً إذا كان لديك برنامج مكافحة فيروسات.",
+    answer: "trick",
+    explanation:
+      "خدعة! المرفقات من مصادر غير موثوقة خطيرة ويمكن أن تحتوي على برمجيات خبيثة.",
+  },
+  {
+    question: "المصادقة الثنائية (2FA) تضيف طبقة حماية إضافية لحساباتك.",
+    answer: "fact",
+    explanation:
+      "حقيقة! المصادقة الثنائية تتطلب خطوة تحقق إضافية، مما يجعل اختراق حسابك أصعب.",
+  },
+  {
+    question:
+      "استخدام نفس كلمة المرور لجميع حساباتك يجعلها أسهل في التذكر ولا يشكل خطراً أمنياً.",
+    answer: "trick",
+    explanation:
+      "خدعة! إذا تم اختراق كلمة مرور واحدة، فإن جميع حساباتك ستكون في خطر.",
+  },
+  {
+    question:
+      "التحديثات الأمنية للأنظمة والتطبيقات مهمة لحماية جهازك من الثغرات الأمنية.",
+    answer: "fact",
+    explanation: "حقيقة! التحديثات تصلح الثغرات الأمنية المكتشفة وتحمي نظامك.",
+  },
+  {
+    question:
+      "شبكات الواي فاي العامة (Public WiFi) آمنة تماماً للقيام بالمعاملات المصرفية.",
+    answer: "trick",
+    explanation:
+      "خدعة! شبكات الواي فاي العامة غير آمنة ويمكن للمهاجمين التجسس على بياناتك.",
+  },
+  {
+    question:
+      "النسخ الاحتياطي المنتظم لبياناتك المهمة يحميك من فقدان البيانات في حالة الهجمات السيبرانية.",
+    answer: "fact",
+    explanation:
+      "حقيقة! النسخ الاحتياطي يضمن عدم فقدان بياناتك حتى في حالة تعرضك لهجوم.",
+  },
+  {
+    question:
+      "رسائل البريد الإلكتروني من البنوك أو الشركات الرسمية دائماً آمنة ويمكن الثقة بها.",
+    answer: "trick",
+    explanation:
+      "خدعة! هجمات التصيد الاحتيالي تتظاهر بأنها من جهات رسمية. تحقق دائماً من المرسل.",
+  },
+  {
+    question:
+      "استخدام VPN (الشبكة الافتراضية الخاصة) يساعد في حماية خصوصيتك عند تصفح الإنترنت.",
+    answer: "fact",
+    explanation:
+      "حقيقة! VPN يشفر اتصالك ويخفي عنوان IP الخاص بك، مما يحمي خصوصيتك.",
+  },
+  {
+    question:
+      "يمكن تخزين كلمات المرور في ملف نصي على سطح المكتب للوصول السريع.",
+    answer: "trick",
+    explanation:
+      "خدعة! هذا خطير جداً! استخدم مدير كلمات مرور آمن بدلاً من ذلك.",
+  },
+  {
+    question:
+      "هجمات التصيد الاحتيالي (Phishing) تحاول خداعك للكشف عن معلوماتك الحساسة.",
+    answer: "fact",
+    explanation:
+      "حقيقة! التصيد الاحتيالي هو محاولة خداع لسرقة معلوماتك الشخصية أو المالية.",
+  },
+  {
+    question:
+      "تطبيقات الهاتف المحمول من المصادر غير الرسمية آمنة للتثبيت دائماً.",
+    answer: "trick",
+    explanation:
+      "خدعة! التطبيقات من مصادر غير رسمية قد تحتوي على برمجيات خبيثة. استخدم المتاجر الرسمية فقط.",
+  },
+  {
+    question:
+      "يمكن للبرمجيات الخبيثة (Malware) سرقة بياناتك أو إلحاق الضرر بنظامك.",
+    answer: "fact",
+    explanation:
+      "حقيقة! البرمجيات الخبيثة يمكن أن تسرق البيانات، تتلف الملفات، أو تتحكم في جهازك.",
+  },
+  {
+    question:
+      "مشاركة موقعك الجغرافي في كل منشور على وسائل التواصل الاجتماعي لا يشكل أي مخاطر أمنية.",
+    answer: "trick",
+    explanation:
+      "خدعة! مشاركة موقعك باستمرار يمكن أن يكشف عن روتينك اليومي ويعرضك للمخاطر.",
+  },
+];
+
+// Socket.IO initialization function
+function initSocket(httpServer, namespace = "/fact-or-trick") {
+  const io = new Server(httpServer, {
+    path: `${namespace}/socket.io/`,
+  });
+
+  const factOrTrickIO = io.of(namespace);
+
+  // Game state
+  let gameState = {
+    roomId: null,
+    players: {},
+    currentQuestion: -1,
+    questions: [],
+    gameStarted: false,
+    questionStartTime: null,
+    roundInProgress: false,
+    totalRounds: 10,
+    questionTimer: null,
+  };
+
+  // Generate unique room ID
+  function generateRoomId() {
+    return Math.random().toString(36).substring(2, 8).toUpperCase();
+  }
+
+  // Initialize new game
+  function initializeGame() {
+    gameState.roomId = generateRoomId();
+    gameState.players = {};
+    gameState.currentQuestion = -1;
+    gameState.gameStarted = false;
+    gameState.questionStartTime = null;
+    gameState.roundInProgress = false;
+
+    // Shuffle and select questions
+    const shuffled = [...questionsDatabase].sort(() => Math.random() - 0.5);
+    gameState.questions = shuffled.slice(0, gameState.totalRounds);
+
+    console.log(
+      `[Fact or Trick] New game initialized with room ID: ${gameState.roomId}`
+    );
+    return gameState.roomId;
+  }
+
+  // Calculate score based on correctness and speed
+  function calculateScore(isCorrect, responseTime) {
+    if (!isCorrect) return 0;
+
+    const maxPoints = 1000;
+    const maxTime = 10;
+
+    const timeBonus = Math.max(0, (maxTime - responseTime) / maxTime);
+    const score = Math.round(maxPoints * (0.5 + 0.5 * timeBonus));
+
+    return score;
+  }
+
+  // Start a question
+  function startQuestion() {
+    const questionIndex = gameState.currentQuestion;
+    if (questionIndex >= gameState.questions.length) {
+      endGame();
+      return;
+    }
+
+    gameState.roundInProgress = true;
+    gameState.questionStartTime = Date.now();
+
+    const question = gameState.questions[questionIndex];
+
+    factOrTrickIO.to("host").emit("question:start", {
+      questionNumber: questionIndex + 1,
+      totalQuestions: gameState.questions.length,
+      question: question.question,
+      timeLimit: 10,
+    });
+
+    factOrTrickIO.to(gameState.roomId).emit("question:start", {
+      questionNumber: questionIndex + 1,
+      totalQuestions: gameState.questions.length,
+      question: question.question,
+      timeLimit: 10,
+    });
+
+    console.log(`[Fact or Trick] Question ${questionIndex + 1} started`);
+
+    gameState.questionTimer = setTimeout(() => {
+      endQuestion();
+    }, 10000);
+  }
+
+  // Check if all players answered
+  function checkAllAnswered() {
+    const playerIds = Object.keys(gameState.players);
+    const allAnswered = playerIds.every((id) => {
+      const player = gameState.players[id];
+      return player.answers[gameState.currentQuestion] !== undefined;
+    });
+
+    if (allAnswered && gameState.roundInProgress) {
+      clearTimeout(gameState.questionTimer);
+      setTimeout(() => {
+        endQuestion();
+      }, 1000);
+    }
+  }
+
+  // End current question and show results
+  function endQuestion() {
+    if (!gameState.roundInProgress) return;
+
+    gameState.roundInProgress = false;
+
+    const question = gameState.questions[gameState.currentQuestion];
+    const results = [];
+
+    Object.values(gameState.players).forEach((player) => {
+      const answer = player.answers[gameState.currentQuestion] || {
+        answer: null,
+        responseTime: 10,
+        isCorrect: false,
+        points: 0,
+      };
+
+      results.push({
+        playerNumber: player.number,
+        playerName: player.name,
+        answer: answer.answer,
+        responseTime: answer.responseTime,
+        isCorrect: answer.isCorrect,
+        points: answer.points,
+        totalScore: player.score,
+      });
+    });
+
+    factOrTrickIO.to("host").emit("question:results", {
+      correctAnswer: question.answer,
+      results,
+    });
+
+    Object.keys(gameState.players).forEach((socketId) => {
+      const player = gameState.players[socketId];
+      const answer = player.answers[gameState.currentQuestion] || {
+        answer: null,
+        responseTime: 10,
+        isCorrect: false,
+        points: 0,
+      };
+
+      factOrTrickIO.to(socketId).emit("question:results", {
+        correctAnswer: question.answer,
+        yourAnswer: answer.answer,
+        isCorrect: answer.isCorrect,
+        responseTime: answer.responseTime,
+        points: answer.points,
+        totalScore: player.score,
+      });
+    });
+
+    console.log(
+      `[Fact or Trick] Question ${gameState.currentQuestion + 1} ended`
+    );
+
+    setTimeout(() => {
+      gameState.currentQuestion++;
+      if (gameState.currentQuestion < gameState.questions.length) {
+        startQuestion();
+      } else {
+        endGame();
+      }
+    }, 5000);
+  }
+
+  // End game and show final results
+  function endGame() {
+    const players = Object.values(gameState.players);
+    players.sort((a, b) => b.score - a.score);
+
+    const finalResults = players.map((player, index) => ({
+      playerNumber: player.number,
+      playerName: player.name,
+      score: player.score,
+      rank: index + 1,
+    }));
+
+    factOrTrickIO.to("host").emit("game:ended", {
+      results: finalResults,
+      winner: finalResults[0],
+    });
+
+    players.forEach((player) => {
+      const rank = finalResults.find(
+        (r) => r.playerNumber === player.number
+      ).rank;
+      factOrTrickIO.to(player.id).emit("game:ended", {
+        rank,
+        score: player.score,
+        isWinner: rank === 1,
+      });
+    });
+
+    console.log("[Fact or Trick] Game ended");
+  }
+
+  // Socket.IO connection handling
+  factOrTrickIO.on("connection", (socket) => {
+    console.log(`[Fact or Trick] Client connected: ${socket.id}`);
+
+    socket.on("host:init", () => {
+      const roomId = initializeGame();
+      socket.join("host");
+
+      let controllerUrl;
+      if (process.env.PUBLIC_URL) {
+        controllerUrl = `${process.env.PUBLIC_URL}${namespace}/controller?room=${roomId}`;
+      } else {
+        const protocol =
+          process.env.NODE_ENV === "production" ? "https" : "http";
+        const host = process.env.HOST || "localhost:3000";
+        controllerUrl = `${protocol}://${host}${namespace}/controller?room=${roomId}`;
+      }
+
+      socket.emit("host:initialized", {
+        roomId,
+        controllerUrl,
+        totalRounds: gameState.totalRounds,
+      });
+
+      console.log(`[Fact or Trick] Host initialized with room ${roomId}`);
+    });
+
+    socket.on("player:join", ({ roomId }) => {
+      if (roomId !== gameState.roomId) {
+        socket.emit("player:error", { message: "غرفة اللعبة غير موجودة" });
+        return;
+      }
+
+      if (gameState.gameStarted) {
+        socket.emit("player:error", { message: "اللعبة قد بدأت بالفعل" });
+        return;
+      }
+
+      const playerCount = Object.keys(gameState.players).length;
+      if (playerCount >= 2) {
+        socket.emit("player:error", {
+          message: "اللعبة ممتلئة (2 لاعبين فقط)",
+        });
+        return;
+      }
+
+      const playerNumber = playerCount + 1;
+      gameState.players[socket.id] = {
+        id: socket.id,
+        number: playerNumber,
+        name: `اللاعب ${playerNumber}`,
+        score: 0,
+        answers: [],
+      };
+
+      socket.join(roomId);
+
+      socket.emit("player:joined", {
+        playerNumber,
+        playerName: `اللاعب ${playerNumber}`,
+      });
+
+      factOrTrickIO.to("host").emit("player:connected", {
+        playerNumber,
+        playerName: `اللاعب ${playerNumber}`,
+        totalPlayers: Object.keys(gameState.players).length,
+      });
+
+      console.log(
+        `[Fact or Trick] Player ${playerNumber} joined room ${roomId}`
+      );
+
+      if (Object.keys(gameState.players).length === 2) {
+        factOrTrickIO.to("host").emit("game:ready");
+      }
+    });
+
+    socket.on("host:start", () => {
+      if (Object.keys(gameState.players).length !== 2) {
+        socket.emit("host:error", { message: "يجب أن يكون هناك لاعبان للبدء" });
+        return;
+      }
+
+      gameState.gameStarted = true;
+      gameState.currentQuestion = 0;
+
+      factOrTrickIO.to("host").emit("game:started");
+      factOrTrickIO.to(gameState.roomId).emit("game:started");
+
+      setTimeout(() => {
+        startQuestion();
+      }, 2000);
+
+      console.log("[Fact or Trick] Game started");
+    });
+
+    socket.on("player:answer", ({ answer }) => {
+      if (!gameState.roundInProgress) return;
+
+      const player = gameState.players[socket.id];
+      if (!player) return;
+
+      const currentAnswers = player.answers[gameState.currentQuestion];
+      if (currentAnswers) return;
+
+      const responseTime = (Date.now() - gameState.questionStartTime) / 1000;
+      const currentQuestion = gameState.questions[gameState.currentQuestion];
+      const isCorrect = answer === currentQuestion.answer;
+      const points = calculateScore(isCorrect, responseTime);
+
+      player.answers[gameState.currentQuestion] = {
+        answer,
+        responseTime,
+        isCorrect,
+        points,
+      };
+
+      player.score += points;
+
+      socket.emit("player:answered", {
+        answer,
+        responseTime,
+      });
+
+      factOrTrickIO.to("host").emit("player:hasAnswered", {
+        playerNumber: player.number,
+      });
+
+      console.log(
+        `[Fact or Trick] Player ${player.number} answered: ${answer} (${
+          isCorrect ? "correct" : "wrong"
+        })`
+      );
+
+      checkAllAnswered();
+    });
+
+    socket.on("host:newGame", () => {
+      if (gameState.questionTimer) {
+        clearTimeout(gameState.questionTimer);
+      }
+
+      const roomId = initializeGame();
+      socket.join("host");
+
+      let controllerUrl;
+      if (process.env.PUBLIC_URL) {
+        controllerUrl = `${process.env.PUBLIC_URL}${namespace}/controller?room=${roomId}`;
+      } else {
+        const protocol =
+          process.env.NODE_ENV === "production" ? "https" : "http";
+        const host = process.env.HOST || "localhost:3000";
+        controllerUrl = `${protocol}://${host}${namespace}/controller?room=${roomId}`;
+      }
+
+      factOrTrickIO.emit("host:initialized", {
+        roomId,
+        controllerUrl,
+        totalRounds: gameState.totalRounds,
+      });
+
+      console.log("[Fact or Trick] New game started");
+    });
+
+    socket.on("disconnect", () => {
+      const player = gameState.players[socket.id];
+      if (player) {
+        delete gameState.players[socket.id];
+        factOrTrickIO.to("host").emit("player:disconnected", {
+          playerNumber: player.number,
+        });
+        console.log(`[Fact or Trick] Player ${player.number} disconnected`);
+      }
+      console.log(`[Fact or Trick] Client disconnected: ${socket.id}`);
+    });
+  });
+
+  console.log(
+    `✅ Fact or Trick Socket.IO initialized on namespace: ${namespace}`
+  );
+}
+
+module.exports = { app, initSocket };
