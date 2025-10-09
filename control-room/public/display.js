@@ -78,6 +78,10 @@ function executeCommand(command) {
       playAlarm();
       break;
 
+    case "stop-alarm":
+      stopAlarm();
+      break;
+
     default:
       console.warn("Unknown command:", command.action);
   }
@@ -87,11 +91,7 @@ function executeCommand(command) {
 function playVideo(videoPath) {
   console.log("Playing video:", videoPath);
 
-  // Stop any currently playing audio
-  if (!alarmSound.paused) {
-    alarmSound.pause();
-    alarmSound.currentTime = 0;
-  }
+  // Don't stop alarm - allow alarm to continue playing alongside video
 
   // Update video source
   videoSource.src = videoPath;
@@ -127,31 +127,26 @@ function stopVideo() {
 function playAlarm() {
   console.log("Playing alarm sound");
 
-  // Stop video if playing
-  if (!videoPlayer.paused) {
-    videoPlayer.pause();
-    videoPlayer.classList.remove("active");
-  }
-
-  // Play alarm on loop
+  // Don't stop video - allow alarm to play alongside video
+  // Just play the alarm on loop
   alarmSound.currentTime = 0;
   alarmSound.play().catch((error) => {
     console.error("Error playing alarm:", error);
     sendStatus("alarm-error");
   });
 
-  // Show standby with alarm indicator
-  showStandby();
   sendStatus("alarm-playing");
+}
 
-  // Auto-stop alarm after 10 seconds (optional)
-  setTimeout(() => {
-    if (!alarmSound.paused) {
-      alarmSound.pause();
-      alarmSound.currentTime = 0;
-      sendStatus("alarm-stopped");
-    }
-  }, 10000);
+// Stop alarm sound
+function stopAlarm() {
+  console.log("Stopping alarm sound");
+
+  if (!alarmSound.paused) {
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+    sendStatus("alarm-stopped");
+  }
 }
 
 // Show standby screen

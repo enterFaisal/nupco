@@ -10,6 +10,7 @@ const playVideo1Btn = document.getElementById("playVideo1Btn");
 const playVideo2Btn = document.getElementById("playVideo2Btn");
 const stopVideoBtn = document.getElementById("stopVideoBtn");
 const playAlarmBtn = document.getElementById("playAlarmBtn");
+const stopAlarmBtn = document.getElementById("stopAlarmBtn");
 const feedbackMsg = document.getElementById("feedbackMsg");
 
 let isConnected = false;
@@ -42,6 +43,10 @@ function setupButtons() {
 
   playAlarmBtn.addEventListener("click", () => {
     sendCommand("play-alarm");
+  });
+
+  stopAlarmBtn.addEventListener("click", () => {
+    sendCommand("stop-alarm");
   });
 }
 
@@ -106,6 +111,7 @@ function enableButtons() {
   playVideo2Btn.disabled = false;
   stopVideoBtn.disabled = false;
   playAlarmBtn.disabled = false;
+  stopAlarmBtn.disabled = false;
 }
 
 // Disable all buttons
@@ -114,6 +120,7 @@ function disableButtons() {
   playVideo2Btn.disabled = true;
   stopVideoBtn.disabled = true;
   playAlarmBtn.disabled = true;
+  stopAlarmBtn.disabled = true;
 }
 
 // Socket event handlers
@@ -142,6 +149,7 @@ socket.on("control:confirmed", (data) => {
     "play-video-2": "تم تشغيل الفيديو - الجزء الثاني",
     "stop-video": "تم إيقاف الفيديو",
     "play-alarm": "تم تشغيل صوت الإنذار",
+    "stop-alarm": "تم إيقاف صوت الإنذار",
   };
 
   const message = actionMessages[data.action] || "تم تنفيذ الأمر";
@@ -193,6 +201,12 @@ function vibrate() {
 }
 
 // Add vibration to button clicks
-[playVideo1Btn, playVideo2Btn, stopVideoBtn, playAlarmBtn].forEach((btn) => {
+[
+  playVideo1Btn,
+  playVideo2Btn,
+  stopVideoBtn,
+  playAlarmBtn,
+  stopAlarmBtn,
+].forEach((btn) => {
   btn.addEventListener("click", vibrate);
 });
