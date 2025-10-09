@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Video Generator</title>
+    <style>
+      body {
+        font-family: "Cairo", sans-serif;
+        background: #1c2346;
+        color: #ededed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        text-align: center;
+      }
+      .container {
+        max-width: 600px;
+        padding: 2rem;
+      }
+      h1 {
+        color: #e06e0e;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+      p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+      .warning {
+        background: rgba(227, 21, 28, 0.2);
+        border: 2px solid #e3151c;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 2rem 0;
+      }
+      code {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+      }
+      .note {
+        background: rgba(224, 110, 14, 0.2);
+        border: 2px solid #e06e0e;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 2rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📹 Test Videos Missing</h1>
+
+      <p>The Control Room system needs video files to function properly.</p>
+
+      <div class="warning">
+        <strong>⚠️ Required Files:</strong><br />
+        <code>public/video/part1.mp4</code><br />
+        <code>public/video/part2.mp4</code>
+      </div>
+
+      <p>
+        Please add your presentation videos to the
+        <code>public/video/</code> directory.
+      </p>
+
+      <div class="note">
+        <strong>💡 Quick Test:</strong><br />
+        You can use any MP4 video files for testing. Just rename them to
+        <code>part1.mp4</code> and <code>part2.mp4</code>.
+      </div>
+
+      <p>Once you add the videos, refresh this page and test the controller!</p>
+    </div>
+  </body>
+</html>
