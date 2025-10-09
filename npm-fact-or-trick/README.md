@@ -105,7 +105,7 @@ fact-or-trick/
 │   ├── controller.css     # Mobile controller styles
 │   ├── controller.js      # Mobile controller logic
 │   ├── logo.svg           # NUPCO logo
-│   ├── slogan.svg         # Campaign slogan
+│   ├── slogan.png         # Campaign slogan
 │   └── bg-1080x1920.svg   # Background image
 ├── server.js              # Express & Socket.IO server
 ├── package.json           # Dependencies
@@ -211,7 +211,7 @@ Edit CSS custom properties in `host.css` and `controller.css`:
 Replace the logo and background files in the `public/` folder:
 
 - `logo.svg`
-- `slogan.svg`
+- `slogan.png`
 - `bg-1080x1920.svg`
 
 ## 📝 Game Flow

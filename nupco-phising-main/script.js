@@ -20,11 +20,11 @@ const emails = [
   },
   {
     subject: "تأكيد أمر شراء (PO) – أدوية حرجة",
-    sender: "procurement@nupco.com.sa",
+    sender: "procurement@nupco.com",
     content: `
       <p>الزملاء الكرام،</p>
       <p>تم إصدار أمر شراء للأدوية الحرجة. التفاصيل عبر البوابة الداخلية.</p>
-      <p><a href="https://portal.nupco.com.sa/">https://portal.nupco.com.sa/</a></p>
+      <p><a href="https://portal.nupco.com/">https://portal.nupco.com/</a></p>
     `,
     tags: ["أمر شراء", "بوابة داخلية"],
     badge: "رسالة",
@@ -47,11 +47,11 @@ const emails = [
   },
   {
     subject: "دعوة منافسة: توريد مستلزمات مختبرية",
-    sender: "tenders@nupco.com.sa",
+    sender: "tenders@nupco.com",
     content: `
       <p>السادة الموردون،</p>
       <p>التقديم عبر بوابة المناقصات:</p>
-      <p><a href="https://tenders.nupco.com.sa/">https://tenders.nupco.com.sa/</a></p>
+      <p><a href="https://tenders.nupco.com/">https://tenders.nupco.com/</a></p>
       <p>آخر موعد للتقديم: الأحد القادم.</p>
     `,
     tags: ["منافسة", "مناقصات"],
@@ -75,7 +75,7 @@ const emails = [
   },
   {
     subject: "استبيان داخلي: تحسين تجربة المورد",
-    sender: "supplier.experience@nupco.com.sa",
+    sender: "supplier.experience@nupco.com",
     content: `
       <p>الزملاء الكرام،</p>
       <p>نأمل تعبئة الاستبيان عبر Microsoft Forms:</p>
@@ -102,10 +102,10 @@ const emails = [
   },
   {
     subject: "تنبيه أمني: إعادة تعيين كلمة المرور",
-    sender: "it.security@nupco.com.sa",
+    sender: "it.security@nupco.com",
     content: `
       <p>رُصدت محاولة تسجيل دخول من جهاز غير معروف. يمكنك تغيير كلمة المرور عبر:</p>
-      <p><a href="https://password.nupco.com.sa/">https://password.nupco.com.sa/</a></p>
+      <p><a href="https://password.nupco.com/">https://password.nupco.com/</a></p>
     `,
     tags: ["تنبيه أمني", "بوابة داخلية"],
     badge: "رسالة",
