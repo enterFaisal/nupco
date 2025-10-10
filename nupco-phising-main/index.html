@@ -102,7 +102,7 @@
       </div>
     </div>
 
-    <!-- End screen -->
+    <!-- Win/Lose screen -->
     <div
       id="end-screen"
       class="modal hidden"
@@ -110,9 +110,13 @@
       aria-modal="true"
       aria-labelledby="end-title"
     >
-      <div class="modal-content center">
-        <h2 id="end-title">انتهت الجولة!</h2>
-        <p id="end-summary"></p>
+      <div class="modal-content center result-modal">
+        <div id="result-icon" class="result-icon"></div>
+        <h2 id="end-title" class="result-title">انتهت الجولة!</h2>
+        <p id="end-summary" class="result-summary"></p>
+        <div class="result-score">
+          <span id="final-score" class="final-score-text"></span>
+        </div>
         <div class="actions">
           <button id="end-review-btn" class="btn ghost">مراجعة الإجابات</button>
           <button id="end-replay-btn" class="btn primary">إعادة اللعب</button>

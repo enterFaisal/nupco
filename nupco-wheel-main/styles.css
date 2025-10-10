@@ -281,3 +281,92 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ------------------------------------------------------
+   Win/Lose Result Screen
+------------------------------------------------------ */
+.result-modal {
+  text-align: center;
+  padding: clamp(24px, 3vw, 36px) !important;
+}
+
+.result-icon {
+  font-size: clamp(4rem, 10vw, 7rem);
+  margin-bottom: 16px;
+  animation: bounceIn 0.6s ease;
+}
+
+.result-title {
+  font-size: clamp(1.5rem, 3vw + 1rem, 2.2rem) !important;
+  font-weight: 900;
+  margin-bottom: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.result-summary {
+  font-size: clamp(1rem, 2vw + 0.5rem, 1.2rem);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  opacity: 0.95;
+}
+
+.result-score {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 16px 24px;
+  margin: 20px auto;
+  display: inline-block;
+}
+
+.final-score-text {
+  font-size: clamp(1.2rem, 2.5vw + 0.8rem, 1.8rem);
+  font-weight: 900;
+  color: #ffb36a;
+}
+
+/* Win state */
+.result-modal.win .result-title {
+  color: #5cb85c;
+  text-shadow: 0 2px 8px rgba(92, 184, 92, 0.4);
+}
+
+.result-modal.win .result-icon {
+  filter: drop-shadow(0 4px 12px rgba(92, 184, 92, 0.5));
+}
+
+/* Lose state */
+.result-modal.lose .result-title {
+  color: #ff6b6b;
+  text-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+}
+
+.result-modal.lose .result-icon {
+  filter: drop-shadow(0 4px 12px rgba(255, 107, 107, 0.5));
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-content.center {
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 12px;
+}

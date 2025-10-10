@@ -252,11 +252,32 @@ function endGame() {
 
   const total = selectedEmails.length;
   const missed = incorrectAnswers.length;
-  endSummary.textContent = `درجتك ${score} من ${total}. ${
-    missed
-      ? "لديك رسائل لم تصب فيها — يمكنك مراجعتها أو البدء من جديد."
-      : "أحسنت!"
-  }`;
+
+  // Check win/lose condition
+  const isWin = score >= 3;
+
+  // Get modal content and add win/lose class
+  const modalContent = document.querySelector("#end-screen .modal-content");
+  modalContent.classList.remove("win", "lose");
+  modalContent.classList.add(isWin ? "win" : "lose");
+
+  // Set result icon
+  const resultIcon = document.getElementById("result-icon");
+  resultIcon.textContent = isWin ? "🎉" : "😔";
+
+  // Set result title
+  const endTitle = document.getElementById("end-title");
+  endTitle.textContent = isWin ? "مبروك! فزت!" : "للأسف! خسرت";
+
+  // Set summary
+  endSummary.textContent = missed
+    ? "لديك رسائل لم تصب فيها — يمكنك مراجعتها أو البدء من جديد."
+    : "أحسنت! أجبت على جميع الأسئلة بشكل صحيح!";
+
+  // Set final score
+  const finalScore = document.getElementById("final-score");
+  finalScore.textContent = `النتيجة النهائية: ${score} من ${total}`;
+
   endScreen.classList.remove("hidden");
 
   // If no mistakes, hide the review button

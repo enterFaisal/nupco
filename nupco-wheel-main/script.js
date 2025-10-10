@@ -151,17 +151,56 @@ function advanceRound() {
 
 function showGameCompleteMessage() {
   quizModal.classList.remove("hidden");
-  quizField.textContent = "🏆 مبروك!";
-  quizQuestion.textContent = `أنهيت جميع المستويات! حصلت على ${GAME_STATE.correctAnswers} نقطة.`;
+
+  // Check win/lose condition
+  const isWin = GAME_STATE.correctAnswers >= 3;
+
+  // Get modal content and add win/lose class
+  const modalContent = document.querySelector("#quiz-modal .modal-content");
+  modalContent.classList.remove("win", "lose");
+  modalContent.classList.add(isWin ? "win" : "lose", "result-modal", "center");
+
+  // Hide quiz title
+  document.getElementById("quiz-title").style.display = "none";
+
+  // Set result icon
+  quizField.innerHTML = `<div class="result-icon">${isWin ? "🎉" : "😔"}</div>`;
+  quizField.className = "";
+
+  // Set result title
+  quizQuestion.className = "result-title";
+  quizQuestion.textContent = isWin ? "مبروك! فزت!" : "للأسف! خسرت";
+
+  // Set summary
+  quizFeedback.className = "result-summary";
+  if (isWin) {
+    quizFeedback.textContent = "أحسنت! أنت الآن خبير في الأمن السيبراني! 🌟";
+  } else {
+    quizFeedback.textContent = "حاول مرة أخرى لتحسين نتيجتك! 💪";
+  }
+  quizFeedback.style.color = "";
+
+  // Clear options grid and replace with result content
+  quizOptions.style.display = "block";
   quizOptions.innerHTML = "";
-  quizFeedback.textContent = "أنت الآن خبير في الأمن السيبراني! 🌟";
-  quizFeedback.style.color = "#ffb36a";
+
+  // Create score display
+  const scoreDiv = document.createElement("div");
+  scoreDiv.className = "result-score";
+  scoreDiv.innerHTML = `<span class="final-score-text">النتيجة النهائية: ${GAME_STATE.correctAnswers} من ${GAME_STATE.totalRounds}</span>`;
+  quizOptions.appendChild(scoreDiv);
+
+  // Add actions
+  const actionsDiv = document.createElement("div");
+  actionsDiv.className = "actions";
 
   const restartBtn = document.createElement("button");
   restartBtn.className = "btn primary";
   restartBtn.textContent = "ابدأ من جديد";
   restartBtn.addEventListener("click", resetGame);
-  quizOptions.appendChild(restartBtn);
+
+  actionsDiv.appendChild(restartBtn);
+  quizOptions.appendChild(actionsDiv);
 
   quizContinue.classList.add("hidden");
 }
@@ -171,6 +210,22 @@ function resetGame() {
   GAME_STATE.correctAnswers = 0;
   GAME_STATE.answeredFields.clear();
   updateLevelDisplay();
+
+  // Reset modal styling
+  const modalContent = document.querySelector("#quiz-modal .modal-content");
+  modalContent.classList.remove("win", "lose", "result-modal", "center");
+
+  // Show quiz title again
+  document.getElementById("quiz-title").style.display = "block";
+
+  // Reset fields
+  quizField.innerHTML = "";
+  quizField.className = "quiz-field";
+  quizQuestion.className = "quiz-question";
+  quizFeedback.className = "quiz-feedback";
+  quizOptions.innerHTML = "";
+  quizOptions.style.display = "";
+
   quizModal.classList.add("hidden");
 }
 
@@ -332,10 +387,23 @@ function spinWheel() {
 
 function openQuizForField(field) {
   const bank = QUIZ_BANK[field.id] || null;
-  quizField.textContent = `المجال: ${field.ar}`;
+
+  // Reset modal styling
+  const modalContent = document.querySelector("#quiz-modal .modal-content");
+  modalContent.classList.remove("win", "lose", "result-modal", "center");
+
+  // Show quiz title
+  document.getElementById("quiz-title").style.display = "block";
+
+  // Reset content
+  quizField.innerHTML = `المجال: ${field.ar}`;
+  quizField.className = "quiz-field";
+  quizQuestion.className = "quiz-question";
+  quizFeedback.className = "quiz-feedback";
   quizFeedback.textContent = "";
   quizContinue.classList.add("hidden");
   quizOptions.innerHTML = "";
+  quizOptions.style.display = "";
   _answered = false;
 
   if (!bank) {
@@ -403,5 +471,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   quizClose.addEventListener("click", () => {
     quizModal.classList.add("hidden");
+  });
+
+  // Test buttons for win/lose screens
+  document.getElementById("test-win-btn").addEventListener("click", () => {
+    GAME_STATE.correctAnswers = 3; // Set winning score
+    GAME_STATE.currentRound = GAME_STATE.totalRounds; // Set to last round
+    showGameCompleteMessage();
+  });
+
+  document.getElementById("test-lose-btn").addEventListener("click", () => {
+    GAME_STATE.correctAnswers = 1; // Set losing score
+    GAME_STATE.currentRound = GAME_STATE.totalRounds; // Set to last round
+    showGameCompleteMessage();
   });
 });
