@@ -34,7 +34,7 @@ body {
 
 body {
   font-family: "Cairo", sans-serif;
-  background: var(--bg) url("bg-1080x1920.svg") center/cover no-repeat fixed;
+  background: var(--bg) url("/shared/bg-1080x1920.svg") center/cover no-repeat fixed;
   color: var(--ink);
   direction: rtl;
   -webkit-font-smoothing: antialiased;
