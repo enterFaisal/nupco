@@ -66,6 +66,15 @@ body {
   pointer-events: auto;
 }
 
+/* Make slogan bigger than logo */
+.brand-header .brand-right,
+.brand-header img[alt*="slogan" i],
+.brand-header img[alt*="شعار الحملة" i],
+.brand-header img[src*="slogan" i] {
+  height: clamp(70px, 10vw, 90px); /* 25% bigger than logo */
+  max-width: 50vw;
+}
+
 /* ------------------------------------------------------
    Layout
 ------------------------------------------------------ */

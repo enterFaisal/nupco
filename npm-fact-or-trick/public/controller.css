@@ -67,6 +67,12 @@ body {
   object-fit: contain;
 }
 
+/* Make slogan bigger than logo */
+.mobile-header img[alt*="شعار نوبكو" i],
+.mobile-header img[src*="slogan" i]:first-child {
+  height: clamp(50px, 9vh, 60px); /* 25% bigger than logo */
+}
+
 /* ------------------------------------------------------
    Screens
 ------------------------------------------------------ */
