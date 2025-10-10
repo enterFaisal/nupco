@@ -111,6 +111,70 @@ const quizFeedback = document.getElementById("quiz-feedback");
 const quizContinue = document.getElementById("quiz-continue");
 
 /* =========================
+   Game levels system
+   ========================= */
+const GAME_STATE = {
+  currentRound: 1,
+  totalRounds: 4,
+  correctAnswers: 0,
+  answeredFields: new Set(),
+};
+
+function updateLevelDisplay() {
+  const levelDisplay = document.getElementById("level-display");
+  const progressBar = document.getElementById("level-progress");
+  const scoreDisplay = document.getElementById("score-display");
+
+  if (levelDisplay) {
+    levelDisplay.textContent = `الجولة ${GAME_STATE.currentRound} من ${GAME_STATE.totalRounds}`;
+  }
+
+  if (progressBar) {
+    const progress =
+      ((GAME_STATE.currentRound - 1) / GAME_STATE.totalRounds) * 100;
+    progressBar.style.width = `${progress}%`;
+  }
+
+  if (scoreDisplay) {
+    scoreDisplay.textContent = `النقاط: ${GAME_STATE.correctAnswers}`;
+  }
+}
+
+function advanceRound() {
+  if (GAME_STATE.currentRound < GAME_STATE.totalRounds) {
+    GAME_STATE.currentRound++;
+    updateLevelDisplay();
+  } else {
+    showGameCompleteMessage();
+  }
+}
+
+function showGameCompleteMessage() {
+  quizModal.classList.remove("hidden");
+  quizField.textContent = "🏆 مبروك!";
+  quizQuestion.textContent = `أنهيت جميع المستويات! حصلت على ${GAME_STATE.correctAnswers} نقطة.`;
+  quizOptions.innerHTML = "";
+  quizFeedback.textContent = "أنت الآن خبير في الأمن السيبراني! 🌟";
+  quizFeedback.style.color = "#ffb36a";
+
+  const restartBtn = document.createElement("button");
+  restartBtn.className = "btn primary";
+  restartBtn.textContent = "ابدأ من جديد";
+  restartBtn.addEventListener("click", resetGame);
+  quizOptions.appendChild(restartBtn);
+
+  quizContinue.classList.add("hidden");
+}
+
+function resetGame() {
+  GAME_STATE.currentRound = 1;
+  GAME_STATE.correctAnswers = 0;
+  GAME_STATE.answeredFields.clear();
+  updateLevelDisplay();
+  quizModal.classList.add("hidden");
+}
+
+/* =========================
    Wheel rendering (canvas)
    ========================= */
 const BRAND_SLICE_COLORS = [
@@ -232,7 +296,18 @@ function spinWheel() {
   wheelSpinBtn.disabled = true;
 
   const N = WHEEL.slices.length;
-  const targetIndex = Math.floor(Math.random() * N);
+  let targetIndex;
+  let attempts = 0;
+
+  // Try to pick a field that hasn't been answered in this level
+  do {
+    targetIndex = Math.floor(Math.random() * N);
+    attempts++;
+  } while (
+    GAME_STATE.answeredFields.has(WHEEL.slices[targetIndex].id) &&
+    attempts < 20
+  );
+
   const rounds = Math.floor(Math.random() * 3) + 3; // 3..5 turns
   const finalRot =
     rounds * 2 * Math.PI + (N - targetIndex) * WHEEL.ANG - WHEEL.ANG / 2;
@@ -278,14 +353,16 @@ function openQuizForField(field) {
     btn.type = "button";
     btn.className = "option-btn";
     btn.textContent = txt;
-    btn.addEventListener("click", () => handleQuizAnswer(i, bank.correct));
+    btn.addEventListener("click", () =>
+      handleQuizAnswer(i, bank.correct, field.id)
+    );
     quizOptions.appendChild(btn);
   });
 
   quizModal.classList.remove("hidden");
 }
 
-function handleQuizAnswer(chosen, correct) {
+function handleQuizAnswer(chosen, correct, fieldId) {
   if (_answered) return;
   _answered = true;
 
@@ -297,10 +374,15 @@ function handleQuizAnswer(chosen, correct) {
   });
 
   if (chosen === correct) {
+    GAME_STATE.correctAnswers++;
     quizFeedback.textContent = "إجابة صحيحة! 👏";
+    quizFeedback.style.color = "#5cb85c";
   } else {
-    quizFeedback.textContent = "إجابة غير صحيحة. جرّب مرة أخرى مع مجال آخر.";
+    quizFeedback.textContent = "إجابة غير صحيحة. لا بأس!";
+    quizFeedback.style.color = "#ffb36a";
   }
+
+  updateLevelDisplay();
   quizContinue.classList.remove("hidden");
 }
 
@@ -309,11 +391,16 @@ function handleQuizAnswer(chosen, correct) {
    ========================= */
 document.addEventListener("DOMContentLoaded", () => {
   fitWheel();
+  updateLevelDisplay();
+
   wheelSpinBtn.addEventListener("click", spinWheel);
+
   quizContinue.addEventListener("click", () => {
     quizModal.classList.add("hidden");
-    // ready to spin again
+    // Advance to next round after any answer (correct or incorrect)
+    advanceRound();
   });
+
   quizClose.addEventListener("click", () => {
     quizModal.classList.add("hidden");
   });

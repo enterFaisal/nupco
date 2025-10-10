@@ -14,7 +14,11 @@ app.use(
 );
 app.use("/wheel", express.static(path.join(__dirname, "nupco-wheel-main")));
 app.use("/shared", express.static(path.join(__dirname, "shared")));
-app.use("/launcher", express.static(path.join(__dirname, "public/launcher")));
+// Secure admin panel path (changed from /launcher for security)
+app.use(
+  "/admin-panel",
+  express.static(path.join(__dirname, "public/launcher"))
+);
 
 // Import and mount npm projects
 const controlRoomApp = require("./npm-control-room/server-module");
@@ -33,9 +37,9 @@ app.get("/test-sockets", (req, res) => {
   res.sendFile(path.join(__dirname, "test-sockets.html"));
 });
 
-// Root route - redirect to launcher
+// Root route - show blank page for security
 app.get("/", (req, res) => {
-  res.redirect("/launcher");
+  res.send("");
 });
 
 // Start server
@@ -46,7 +50,7 @@ httpServer.listen(PORT, HOST, () => {
   console.log(`\n🚀 NUPCO Interactive Hub running on port ${PORT}`);
   console.log(`🌐 Server listening on ${HOST}:${PORT}`);
   console.log(`\n📱 Available pages:`);
-  console.log(`   🎮 Launcher (Root): http://localhost:${PORT}/`);
+  console.log(`   🔐 Admin Panel: http://localhost:${PORT}/admin-panel`);
   console.log(`   First Day: http://localhost:${PORT}/first-day`);
   console.log(`   Phishing: http://localhost:${PORT}/phishing`);
   console.log(`   Wheel: http://localhost:${PORT}/wheel`);
