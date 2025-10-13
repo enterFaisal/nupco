@@ -291,7 +291,10 @@ function spinWheel() {
 
   const rounds = Math.floor(Math.random() * 3) + 3; // 3..5 turns
   const finalRot =
-    rounds * 2 * Math.PI + (N - targetIndex) * WHEEL.ANG - WHEEL.ANG / 2;
+    rounds * 2 * Math.PI +
+    (N - targetIndex) * WHEEL.ANG -
+    WHEEL.ANG / 2 -
+    Math.PI / 2;
   const D = 3200; // ms
   const t0 = performance.now();
   const easeOut = (t) => 1 - (1 - t) * (1 - t);
@@ -359,6 +362,9 @@ function openQuizForField(field) {
 function handleQuizAnswer(chosen, correct, fieldId) {
   if (_answered) return;
   _answered = true;
+
+  // Add the field to the answered set to avoid repeats
+  GAME_STATE.answeredFields.add(fieldId);
 
   const btns = [...quizOptions.querySelectorAll(".option-btn")];
   btns.forEach((b, i) => {
