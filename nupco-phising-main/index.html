@@ -69,6 +69,24 @@
       </div>
     </main>
 
+    <!-- Instant Feedback Modal -->
+    <div
+      id="feedback-modal"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="feedback-title"
+    >
+      <div class="modal-content center feedback-modal">
+        <div id="feedback-icon" class="feedback-result-icon"></div>
+        <h2 id="feedback-title" class="feedback-result-title">إجابة صحيحة!</h2>
+        <p id="feedback-explanation" class="feedback-explanation"></p>
+        <div class="actions">
+          <button id="next-question-btn" class="btn primary">التالي</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Review modal (explanations live here only) -->
     <div
       id="review-modal"

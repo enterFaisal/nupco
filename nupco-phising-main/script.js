@@ -62,6 +62,12 @@ const endSummary = document.getElementById("end-summary");
 const endReviewBtn = document.getElementById("end-review-btn");
 const endReplayBtn = document.getElementById("end-replay-btn");
 
+const feedbackModal = document.getElementById("feedback-modal");
+const feedbackIcon = document.getElementById("feedback-icon");
+const feedbackTitle = document.getElementById("feedback-title");
+const feedbackExplanation = document.getElementById("feedback-explanation");
+const nextQuestionBtn = document.getElementById("next-question-btn");
+
 /* =========================
    Utils
    ========================= */
@@ -137,20 +143,60 @@ function updateTimer() {
 function handleUserChoice(userThinksIsPhishing) {
   const email = selectedEmails[currentEmailIndex];
   const correct = email.isPhishing;
+  const isCorrect = userThinksIsPhishing === correct;
 
-  if (userThinksIsPhishing === correct) {
+  if (isCorrect) {
     score++;
     scoreDisplay.textContent = score;
   } else {
     incorrectAnswers.push({ email, userChoice: userThinksIsPhishing });
   }
 
+  // Show instant feedback
+  showFeedback(isCorrect, email);
+}
+
+function showFeedback(isCorrect, email) {
+  // Disable buttons
+  deleteBtn.disabled = true;
+  reportBtn.disabled = true;
+
+  // Set feedback content
+  if (isCorrect) {
+    feedbackIcon.textContent = "🎉";
+    feedbackTitle.textContent = "إجابة صحيحة!";
+    feedbackTitle.style.color = "#4caf50";
+  } else {
+    feedbackIcon.textContent = "❌";
+    feedbackTitle.textContent = "إجابة خاطئة";
+    feedbackTitle.style.color = "#f44336";
+  }
+
+  feedbackExplanation.textContent = email.explanation || "لا يوجد توضيح متاح.";
+
+  // Show modal
+  feedbackModal.classList.remove("hidden");
+}
+
+function goToNextQuestion() {
+  // Hide feedback modal
+  feedbackModal.classList.add("hidden");
+
+  // Move to next question
   currentEmailIndex++;
   displayEmail();
+
+  // Re-enable buttons
+  deleteBtn.disabled = false;
+  reportBtn.disabled = false;
 }
 
 function endGame() {
   clearInterval(timerId);
+
+  // Hide feedback modal if showing
+  feedbackModal.classList.add("hidden");
+
   deleteBtn.disabled = true;
   reportBtn.disabled = true;
 
@@ -259,4 +305,8 @@ endReviewBtn.addEventListener("click", () => {
     fillReviewCard();
     reviewModal.classList.remove("hidden");
   }
+});
+
+nextQuestionBtn.addEventListener("click", () => {
+  goToNextQuestion();
 });

@@ -49,7 +49,7 @@ app.get("/api/qrcode", async (req, res) => {
 
 // Load questions from JSON file
 const fs = require("fs");
-const path = require("path");
+// const path = require("path");
 
 let questionsDatabase = [];
 
@@ -83,7 +83,7 @@ function initSocket(httpServer, namespace = "/fact-or-trick") {
     gameStarted: false,
     questionStartTime: null,
     roundInProgress: false,
-    totalRounds: 10,
+    totalRounds: 7,
     questionTimer: null,
   };
 

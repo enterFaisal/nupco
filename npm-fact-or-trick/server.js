@@ -59,7 +59,7 @@ let gameState = {
   gameStarted: false,
   questionStartTime: null,
   roundInProgress: false,
-  totalRounds: 10,
+  totalRounds: 7,
   questionTimer: null,
 };
 

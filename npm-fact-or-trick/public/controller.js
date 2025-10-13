@@ -26,7 +26,6 @@ const roundNum = document.getElementById("round-num");
 const totalRoundsEl = document.getElementById("total-rounds");
 const playerScore = document.getElementById("player-score");
 
-const questionText = document.getElementById("question-text");
 const factBtn = document.getElementById("fact-btn");
 const trickBtn = document.getElementById("trick-btn");
 
@@ -93,7 +92,6 @@ socket.on(
 
     roundNum.textContent = questionNumber;
     totalRoundsEl.textContent = totalQuestions;
-    questionText.textContent = question;
 
     // Enable buttons
     buttonsEnabled = true;
