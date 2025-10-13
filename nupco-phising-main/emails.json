@@ -1,0 +1,101 @@
+[
+    {
+        "subject": "تحديث عاجل لحساب المورد",
+        "sender": "support@vendor-nupco.com",
+        "content": "<p>المورد العزيز،</p><p>تم تعليق حسابك على بوابة الموردين. لتجنّب إيقاف التعامل نرجو تحديث البيانات البنكية عبر الرابط:</p><a href=\"http://nupco-vendors-verify.com/login\">تحديث الحساب الآن</a><p>سيتم إيقاف جميع الأوامر خلال 24 ساعة.</p>",
+        "tags": [
+            "بوابة الموردين",
+            "بيانات بنكية",
+            "رابط خارجي"
+        ],
+        "badge": "رسالة",
+        "isPhishing": true,
+        "explanation": "النطاق غير رسمي ويطلب تحديث بيانات حساسة بشكل عاجل — مؤشر تصيّد."
+    },
+    {
+        "subject": "تأكيد أمر شراء (PO) – أدوية حرجة",
+        "sender": "procurement@nupco.com",
+        "content": "<p>الزملاء الكرام،</p><p>تم إصدار أمر شراء للأدوية الحرجة. التفاصيل عبر البوابة الداخلية.</p><p><a href=\"https://portal.nupco.com/\">https://portal.nupco.com/</a></p>",
+        "tags": [
+            "أمر شراء",
+            "بوابة داخلية"
+        ],
+        "badge": "رسالة",
+        "isPhishing": false,
+        "explanation": "مرسلة من نطاق رسمي وبرابط داخلي دون طلب معلومات حساسة."
+    },
+    {
+        "subject": "فواتير متأخرة – ضرورة التسديد فورًا",
+        "sender": "billing@nupco-payments.com",
+        "content": "<p>عميلنا العزيز،</p><p>لديك 3 فواتير مستحقة. يرجى السداد عبر الرابط:</p><a href=\"http://nupco-payments.com/quickpay\">سداد فوري</a><p>سيتم إيقاف الخدمة خلال 12 ساعة.</p>",
+        "tags": [
+            "فواتير",
+            "رابط دفع",
+            "استعجال"
+        ],
+        "badge": "رسالة",
+        "isPhishing": true,
+        "explanation": "رابط دفع على نطاق غير رسمي ولهجة استعجال — تصيّد."
+    },
+    {
+        "subject": "دعوة منافسة: توريد مستلزمات مختبرية",
+        "sender": "tenders@nupco.com",
+        "content": "<p>السادة الموردون،</p><p>التقديم عبر بوابة المناقصات:</p><p><a href=\"https://tenders.nupco.com/\">https://tenders.nupco.com/</a></p><p>آخر موعد للتقديم: الأحد القادم.</p>",
+        "tags": [
+            "منافسة",
+            "مناقصات"
+        ],
+        "badge": "رسالة",
+        "isPhishing": false,
+        "explanation": "نطاق ورسالة رسميان، وروابط صحيحة."
+    },
+    {
+        "subject": "مرفق: كشف رواتب شهرية",
+        "sender": "hr@nupco-hr.com",
+        "content": "<p>الموظف العزيز،</p><p>افتح الملف المرفق (Password: Nupc0!). في حال تعذر الفتح ثبّت الإضافة:</p><a href=\"http://update-plugin-salary.com/addon.exe\">تنزيل الإضافة</a>",
+        "tags": [
+            "مرفق محمي",
+            "تنزيل برنامج"
+        ],
+        "badge": "رسالة",
+        "isPhishing": true,
+        "explanation": "تنزيل برنامج من موقع مجهول + مرفق محمي بكلمة مرور — تصيّد/برمجيات خبيثة."
+    },
+    {
+        "subject": "استبيان داخلي: تحسين تجربة المورد",
+        "sender": "supplier.experience@nupco.com",
+        "content": "<p>الزملاء الكرام،</p><p>نأمل تعبئة الاستبيان عبر Microsoft Forms:</p><p><a href=\"https://forms.office.com/\">https://forms.office.com/</a></p><p>مع الشكر، إدارة التميز</p>",
+        "tags": [
+            "استبيان",
+            "Microsoft Forms"
+        ],
+        "badge": "رسالة",
+        "isPhishing": false,
+        "explanation": "رابط موثوق والمرسل داخلي."
+    },
+    {
+        "subject": "رسوم هيئة الغذاء والدواء على الشحنات",
+        "sender": "sfda-clear@nupco-clearance.com",
+        "content": "<p>لتحرير الشحنة، نرجو السداد عبر الرابط:</p><a href=\"http://sfda-fastpay.net/\">دفع الرسوم</a><p>سيتم إتلاف الشحنة خلال ساعتين.</p>",
+        "tags": [
+            "جمارك/فسح",
+            "رابط دفع خارجي",
+            "استعجال شديد"
+        ],
+        "badge": "رسالة",
+        "isPhishing": true,
+        "explanation": "نطاق غير رسمي وتهديد زمني — تصيّد."
+    },
+    {
+        "subject": "تنبيه أمني: إعادة تعيين كلمة المرور",
+        "sender": "it.security@nupco.com",
+        "content": "<p>رُصدت محاولة تسجيل دخول من جهاز غير معروف. يمكنك تغيير كلمة المرور عبر:</p><p><a href=\"https://password.nupco.com/\">https://password.nupco.com/</a></p>",
+        "tags": [
+            "تنبيه أمني",
+            "بوابة داخلية"
+        ],
+        "badge": "رسالة",
+        "isPhishing": false,
+        "explanation": "تنبيه مشروع مع رابط داخلي لإدارة كلمة المرور."
+    }
+]

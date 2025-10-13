@@ -132,15 +132,30 @@ totalRounds: 10; // Change this value
 
 ### Add/Edit Questions
 
-Edit the `questionsDatabase` array in `server.js`:
+**✨ New: Questions are now in a separate JSON file for easy editing!**
 
-```javascript
-{
-  question: "Your question here",
-  answer: "fact", // or "trick"
-  explanation: "Explanation here"
-}
+📝 **Questions File**: `questions.json`
+
+📖 **Complete Guide**: Read [QUESTIONS_GUIDE.md](QUESTIONS_GUIDE.md) for:
+
+- How to add new questions
+- How to edit existing questions
+- Tips and examples
+- Troubleshooting
+
+**Quick Example:**
+
+```json
+[
+  {
+    "question": "Your question here",
+    "answer": "fact",
+    "explanation": "Explanation here"
+  }
+]
 ```
+
+The server automatically loads questions from `questions.json` on startup.
 
 ## 🌐 Deployment
 

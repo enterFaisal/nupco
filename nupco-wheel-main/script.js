@@ -1,99 +1,25 @@
 /* =========================
    Data: fields + simple quiz
+   Loaded from questions.json
    ========================= */
-const CYBER_FIELDS = [
-  { id: "passwords", ar: "كلمات المرور" },
-  { id: "phishing", ar: "التصيّد" },
-  { id: "mfa", ar: "التحقق الثنائي" },
-  { id: "wifi", ar: "شبكات Wi-Fi" },
-  { id: "updates", ar: "التحديثات" },
-  { id: "privacy", ar: "الخصوصية" },
-  { id: "malware", ar: "برمجيات خبيثة" },
-  { id: "social", ar: "هندسة اجتماعية" },
-];
+let CYBER_FIELDS = [];
+let QUIZ_BANK = {};
 
-const QUIZ_BANK = {
-  passwords: {
-    q: "ما أفضل طريقة لإنشاء كلمة مرور قوية؟",
-    options: [
-      "أن تكون قصيرة وسهلة",
-      "استخدام اسمك وتاريخ ميلادك",
-      "مزج أحرف كبيرة وصغيرة وأرقام ورموز",
-      "استخدام نفس الكلمة لكل الحسابات",
-    ],
-    correct: 2,
-  },
-  phishing: {
-    q: "ما علامة شائعة على رسالة تصيّد؟",
-    options: [
-      "لغة رسمية بلا أخطاء",
-      "طلب عاجل مع رابط غريب",
-      "مرسل معروف داخل الشركة دائمًا",
-      "الرسالة بلا أي روابط",
-    ],
-    correct: 1,
-  },
-  mfa: {
-    q: "فائدة التحقق الثنائي (MFA) هي…",
-    options: [
-      "يزيد سرعة الدخول فقط",
-      "يمنع كل الهجمات نهائيًا",
-      "يضيف طبقة أمان عبر كود/تطبيق",
-      "يلغي الحاجة لكلمة المرور",
-    ],
-    correct: 2,
-  },
-  wifi: {
-    q: "الأكثر أمانًا في شبكة Wi-Fi عامة:",
-    options: [
-      "الدخول للحسابات البنكية مباشرة",
-      "استخدام VPN عند الحاجة",
-      "إيقاف التحديثات",
-      "مشاركة الشبكة مع الغرباء",
-    ],
-    correct: 1,
-  },
-  updates: {
-    q: "لماذا نثبت تحديثات النظام/التطبيقات؟",
-    options: [
-      "لتغيير الشكل فقط",
-      "لإصلاح ثغرات وتحسين الأمان",
-      "لتقليل مساحة الجهاز",
-      "لا داعي للتحديثات",
-    ],
-    correct: 1,
-  },
-  privacy: {
-    q: "قبل تحميل تطبيق جديد يُفضّل أن…",
-    options: [
-      "تقبل كل الأذونات فورًا",
-      "تراجع التقييمات والصلاحيات",
-      "تشارك بياناتك للتجربة",
-      "تفعل الموقع دائمًا",
-    ],
-    correct: 1,
-  },
-  malware: {
-    q: "وصلك مرفق .exe من مرسل مجهول، ماذا تفعل؟",
-    options: [
-      "تثبته فورًا",
-      "ترسله لزميل",
-      "تتجاهله وتبلّغ الأمن السيبراني",
-      "تنزله ثم تفحصه لاحقًا",
-    ],
-    correct: 2,
-  },
-  social: {
-    q: "شخص يدّعي من الـ IT يطلب كلمة مرورك بالهاتف:",
-    options: [
-      "تعطيه الكلمة",
-      "ترفض وتبلّغ القسم المختص",
-      "تطلب منه إرسالها واتساب",
-      "تعطيه جزءًا منها",
-    ],
-    correct: 1,
-  },
-};
+// Load questions from JSON file
+async function loadQuestions() {
+  try {
+    const response = await fetch("questions.json");
+    const data = await response.json();
+    CYBER_FIELDS = data.fields;
+    QUIZ_BANK = data.questions;
+    console.log("✅ Questions loaded successfully");
+    return true;
+  } catch (error) {
+    console.error("❌ Error loading questions:", error);
+    alert("خطأ في تحميل الأسئلة. يرجى التحديث.");
+    return false;
+  }
+}
 
 /* =========================
    DOM
@@ -245,9 +171,9 @@ const BRAND_SLICE_COLORS = [
 
 const WHEEL = {
   rot: 0,
-  slices: CYBER_FIELDS,
+  slices: [],
   spinning: false,
-  ANG: (2 * Math.PI) / CYBER_FIELDS.length,
+  ANG: 0,
 };
 
 function drawWheel(rot = 0) {
@@ -457,7 +383,15 @@ function handleQuizAnswer(chosen, correct, fieldId) {
 /* =========================
    Events
    ========================= */
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  // Load questions first
+  const loaded = await loadQuestions();
+  if (!loaded) return;
+
+  // Initialize wheel with loaded data
+  WHEEL.slices = CYBER_FIELDS;
+  WHEEL.ANG = (2 * Math.PI) / CYBER_FIELDS.length;
+
   fitWheel();
   updateLevelDisplay();
 
@@ -471,18 +405,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   quizClose.addEventListener("click", () => {
     quizModal.classList.add("hidden");
-  });
-
-  // Test buttons for win/lose screens
-  document.getElementById("test-win-btn").addEventListener("click", () => {
-    GAME_STATE.correctAnswers = 3; // Set winning score
-    GAME_STATE.currentRound = GAME_STATE.totalRounds; // Set to last round
-    showGameCompleteMessage();
-  });
-
-  document.getElementById("test-lose-btn").addEventListener("click", () => {
-    GAME_STATE.correctAnswers = 1; // Set losing score
-    GAME_STATE.currentRound = GAME_STATE.totalRounds; // Set to last round
-    showGameCompleteMessage();
   });
 });
