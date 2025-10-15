@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>You've Been Phished!</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;600;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/shared/shared.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -14,14 +18,97 @@
     </header>
     <main class="wrap">
       <div id="tap-to-start">
-        <p dir="rtl">اضغط لإظهار رسالتك</p>
+        <p dir="rtl">اضغط للاطلاع على محتوى الصندوق</p>
       </div>
-      <div class="warning-container hidden">
-        <h1 dir="rtl">صدناك!</h1>
-        <p dir="rtl">
-          خلك واعي، وشاركنا في فعالية “تصيده ما يصيدك” غداً الساعة () صباحاً في
-          الدور (). ولا تنسى تجيب جوازك السيبراني وتدخل السحب على جوائز قيمة.
-        </p>
+
+      <!-- Caught Message -->
+      <div id="caught-message" class="hidden">
+        <div class="caught-card">
+          <h1 dir="rtl">صدناك</h1>
+          <p dir="rtl">… بس هل بتقدر تصيدها بكرة؟</p>
+        </div>
+      </div>
+
+      <!-- Warning Modal -->
+      <div class="warning-modal hidden">
+        <div class="modal-window">
+          <!-- Window Header -->
+          <div class="window-header">
+            <div class="header-stripes"></div>
+            <div class="header-content">
+              <h1>Warning!</h1>
+            </div>
+            <div class="window-controls">
+              <span class="control-btn minimize"></span>
+              <span class="control-btn maximize"></span>
+              <span class="control-btn close"></span>
+            </div>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <h2 dir="rtl">تصيــده مــا يصيــدك</h2>
+            <p dir="rtl">
+              انضم لفعالية تصيده ما يصيدك، تجربة تفاعلية وممتعة في عالم الأمن
+              السيبرانــي، تزيد وعيك وتختبــر معرفتك، مع فرصة الفوز بجوائز قيمة.
+            </p>
+
+            <div class="warning-note" dir="rtl">
+              <strong>ملاحظة:</strong> تأكد من إحضار جوالك وتذكرتك معك لدخول
+              السحب على الجوائز.
+            </div>
+
+            <div class="event-info">
+              <div class="info-badge">
+                <svg class="badge-icon" viewBox="0 0 24 24" fill="none">
+                  <rect
+                    x="3"
+                    y="6"
+                    width="18"
+                    height="15"
+                    rx="2"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M3 10h18M8 3v6M16 3v6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <span dir="rtl">21 أكتوبر 2025</span>
+              </div>
+              <div class="info-badge">
+                <svg class="badge-icon" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span dir="rtl">الدور 12</span>
+              </div>
+              <div class="info-badge">
+                <svg class="badge-icon" viewBox="0 0 24 24" fill="none">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M12 6v6l4 4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <span dir="rtl">10 ص - 1 م</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
     <audio id="alarm-sound" src="alarm.mp3" loop></audio>

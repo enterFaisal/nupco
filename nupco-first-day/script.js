@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const audio = document.getElementById("alarm-sound");
   const tapToStart = document.getElementById("tap-to-start");
-  const warningContainer = document.querySelector(".warning-container");
+  const caughtMessage = document.getElementById("caught-message");
+  const warningModal = document.querySelector(".warning-modal");
 
   // Create Web Audio API context for iOS volume control
   let audioContext;
@@ -40,9 +41,17 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Audio play failed:", error);
     });
 
-    // Show the warning message
+    // Hide tap to start
     tapToStart.classList.add("hidden");
-    warningContainer.classList.remove("hidden");
+
+    // Show caught message immediately
+    caughtMessage.classList.remove("hidden");
+
+    // After 1 second, hide caught message and show warning modal
+    setTimeout(() => {
+      caughtMessage.classList.add("hidden");
+      warningModal.classList.remove("hidden");
+    }, 3000);
   }
 
   // Use 'touchend' for mobile and 'click' for desktop
