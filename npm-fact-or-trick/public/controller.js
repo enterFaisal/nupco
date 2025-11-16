@@ -47,10 +47,16 @@ const finalMessage = document.getElementById("final-message");
 const finalScoreValue = document.getElementById("final-score-value");
 
 const reconnectBtn = document.getElementById("reconnect-btn");
+const readyBtn = document.getElementById("ready-btn");
+const readyBtnText = document.getElementById("ready-btn-text");
+const waitingStatusText = document.getElementById("waiting-status-text");
+const waitingAnimation = document.getElementById("waiting-animation");
 
 let currentPlayerNumber = null;
 let currentScore = 0;
 let buttonsEnabled = false;
+let isReady = false;
+let refreshTimerInterval = null;
 
 // Get room ID from URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -68,8 +74,13 @@ if (!roomId) {
 socket.on("player:joined", ({ playerNumber, playerName: name }) => {
   currentPlayerNumber = playerNumber;
   playerName.textContent = name;
+  isReady = false;
 
   showScreen("waiting");
+  readyBtn.classList.remove("disabled");
+  readyBtnText.textContent = "جاهز";
+  waitingStatusText.textContent = "اضغط جاهز للبدء";
+  waitingAnimation.classList.add("hidden");
   console.log(`Joined as ${name}`);
 });
 
@@ -77,6 +88,25 @@ socket.on("player:joined", ({ playerNumber, playerName: name }) => {
 socket.on("player:error", ({ message }) => {
   alert(message);
   showScreen("disconnected");
+});
+
+// Ready button handler
+readyBtn.addEventListener("click", () => {
+  if (isReady) return;
+  
+  isReady = true;
+  socket.emit("player:ready");
+  readyBtn.classList.add("disabled");
+  readyBtnText.textContent = "✓ جاهز";
+  waitingStatusText.textContent = "انتظر اللاعب الآخر...";
+  waitingAnimation.classList.remove("hidden");
+});
+
+// Player ready status update
+socket.on("player:readyStatus", ({ allReady }) => {
+  if (allReady) {
+    waitingStatusText.textContent = "اللعبة ستبدأ قريباً...";
+  }
 });
 
 // Game started
@@ -208,8 +238,32 @@ socket.on("game:ended", ({ rank, score, isWinner }) => {
     finalMessage.classList.remove("winner");
   }
 
+  // Start refresh countdown timer
+  startRefreshTimer();
+
   console.log(`Game ended. Rank: ${rank}, Score: ${score}`);
 });
+
+// Refresh timer function
+function startRefreshTimer() {
+  const refreshTimerDisplay = document.getElementById("refresh-timer-display");
+  let timeLeft = 15;
+
+  if (refreshTimerInterval) {
+    clearInterval(refreshTimerInterval);
+  }
+
+  refreshTimerDisplay.textContent = timeLeft;
+
+  refreshTimerInterval = setInterval(() => {
+    timeLeft--;
+    refreshTimerDisplay.textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+      clearInterval(refreshTimerInterval);
+    }
+  }, 1000);
+}
 
 // Disconnect handling
 socket.on("disconnect", () => {

@@ -20,8 +20,7 @@ const finalScreen = document.getElementById("final-screen");
 const qrCanvas = document.getElementById("qr-canvas");
 const player1Slot = document.getElementById("player1-slot");
 const player2Slot = document.getElementById("player2-slot");
-const startGameBtn = document.getElementById("start-game-btn");
-const newGameBtn = document.getElementById("new-game-btn");
+// Buttons removed - no mouse/touch control on big screen
 
 const roundNumber = document.getElementById("round-number");
 const totalRounds = document.getElementById("total-rounds");
@@ -142,6 +141,10 @@ socket.on(
     currentRoomId = roomId;
     totalRounds.textContent = total;
 
+    // Print mobile controller URL to console
+    console.log("📱 Mobile Controller URL:", controllerUrl);
+    console.log("🎮 Room ID:", roomId);
+
     // Generate QR code
     generateQRCode(controllerUrl);
 
@@ -151,19 +154,32 @@ socket.on(
 );
 
 // Player connected
-socket.on("player:connected", ({ playerNumber, playerName, totalPlayers }) => {
+socket.on("player:connected", ({ playerNumber, playerName, totalPlayers, isReady }) => {
   const slot = playerNumber === 1 ? player1Slot : player2Slot;
   slot.classList.add("connected");
   slot.querySelector(".status-indicator").classList.remove("waiting");
   slot.querySelector(".status-indicator").classList.add("connected");
+  
+  const readyStatus = document.getElementById(`player${playerNumber}-ready`);
+  if (readyStatus) {
+    readyStatus.textContent = isReady ? "✓ جاهز" : "⏳ في الانتظار";
+    readyStatus.classList.toggle("ready", isReady);
+  }
 
   console.log(`${playerName} connected (${totalPlayers}/2)`);
 });
 
-// Game ready to start
-socket.on("game:ready", () => {
-  startGameBtn.classList.remove("hidden");
+// Player ready
+socket.on("player:ready", ({ playerNumber }) => {
+  const readyStatus = document.getElementById(`player${playerNumber}-ready`);
+  if (readyStatus) {
+    readyStatus.textContent = "✓ جاهز";
+    readyStatus.classList.add("ready");
+  }
+  console.log(`Player ${playerNumber} is ready`);
 });
+
+// Game ready to start - removed, now auto-starts when both players ready
 
 // Player disconnected
 socket.on("player:disconnected", ({ playerNumber }) => {
@@ -171,13 +187,6 @@ socket.on("player:disconnected", ({ playerNumber }) => {
   slot.classList.remove("connected");
   slot.querySelector(".status-indicator").classList.remove("connected");
   slot.querySelector(".status-indicator").classList.add("waiting");
-
-  startGameBtn.classList.add("hidden");
-});
-
-// Start game button
-startGameBtn.addEventListener("click", () => {
-  socket.emit("host:start");
 });
 
 // Game started
@@ -299,12 +308,33 @@ socket.on("game:ended", ({ results, winner }) => {
   if (winnerCard) {
     winnerCard.classList.add("winner");
   }
+
+  // Start refresh countdown timer
+  startRefreshTimer();
+
+  // Auto-start new game after 15 seconds (no button on big screen)
+  setTimeout(() => {
+    socket.emit("host:newGame");
+  }, 15000);
 });
 
-// New game button
-newGameBtn.addEventListener("click", () => {
-  socket.emit("host:newGame");
-});
+// Refresh timer function for host screen
+function startRefreshTimer() {
+  const refreshTimerDisplay = document.getElementById("refresh-timer-host");
+  if (!refreshTimerDisplay) return;
+
+  let timeLeft = 15;
+  refreshTimerDisplay.textContent = timeLeft;
+
+  const timerInterval = setInterval(() => {
+    timeLeft--;
+    refreshTimerDisplay.textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+    }
+  }, 1000);
+}
 
 // Helper functions
 function showScreen(screen) {
@@ -330,13 +360,18 @@ function showScreen(screen) {
 }
 
 function resetPlayerSlots() {
-  [player1Slot, player2Slot].forEach((slot) => {
+  [player1Slot, player2Slot].forEach((slot, index) => {
     slot.classList.remove("connected");
     const indicator = slot.querySelector(".status-indicator");
     indicator.classList.remove("connected");
     indicator.classList.add("waiting");
+    
+    const readyStatus = document.getElementById(`player${index + 1}-ready`);
+    if (readyStatus) {
+      readyStatus.textContent = "⏳ في الانتظار";
+      readyStatus.classList.remove("ready");
+    }
   });
-  startGameBtn.classList.add("hidden");
 }
 
 function resetPlayerAnswerStatus(answerBox) {

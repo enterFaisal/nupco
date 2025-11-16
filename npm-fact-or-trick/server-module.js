@@ -85,6 +85,7 @@ function initSocket(httpServer, namespace = "/fact-or-trick") {
     roundInProgress: false,
     totalRounds: 7,
     questionTimer: null,
+    playersReady: {},
   };
 
   // Generate unique room ID
@@ -100,6 +101,7 @@ function initSocket(httpServer, namespace = "/fact-or-trick") {
     gameState.gameStarted = false;
     gameState.questionStartTime = null;
     gameState.roundInProgress = false;
+    gameState.playersReady = {};
 
     // Shuffle and select questions
     const shuffled = [...questionsDatabase].sort(() => Math.random() - 0.5);
@@ -295,7 +297,8 @@ function initSocket(httpServer, namespace = "/fact-or-trick") {
         totalRounds: gameState.totalRounds,
       });
 
-      console.log(`[Fact or Trick] Host initialized with room ${roomId}`);
+      console.log(`\n[Fact or Trick] 🎮 Host initialized with room ${roomId}`);
+      console.log(`[Fact or Trick] 📱 Mobile Controller URL: ${controllerUrl}\n`);
     });
 
     socket.on("player:join", ({ roomId }) => {
@@ -325,6 +328,7 @@ function initSocket(httpServer, namespace = "/fact-or-trick") {
         score: 0,
         answers: [],
       };
+      gameState.playersReady[socket.id] = false;
 
       socket.join(roomId);
 
@@ -337,22 +341,66 @@ function initSocket(httpServer, namespace = "/fact-or-trick") {
         playerNumber,
         playerName: `اللاعب ${playerNumber}`,
         totalPlayers: Object.keys(gameState.players).length,
+        isReady: false,
       });
 
       console.log(
         `[Fact or Trick] Player ${playerNumber} joined room ${roomId}`
       );
+    });
 
-      if (Object.keys(gameState.players).length === 2) {
-        factOrTrickIO.to("host").emit("game:ready");
+    // Player ready
+    socket.on("player:ready", () => {
+      const player = gameState.players[socket.id];
+      if (!player || gameState.gameStarted) return;
+
+      gameState.playersReady[socket.id] = true;
+
+      // Notify host
+      factOrTrickIO.to("host").emit("player:ready", {
+        playerNumber: player.number,
+      });
+
+      // Check if all players are ready
+      const allPlayersReady =
+        Object.keys(gameState.players).length === 2 &&
+        Object.values(gameState.playersReady).every((ready) => ready === true);
+
+      // Notify all players about ready status
+      factOrTrickIO.to(gameState.roomId).emit("player:readyStatus", {
+        allReady: allPlayersReady,
+      });
+
+      if (allPlayersReady) {
+        // Auto-start game when both players are ready
+        gameState.gameStarted = true;
+        gameState.currentQuestion = 0;
+
+        factOrTrickIO.to("host").emit("game:started");
+        factOrTrickIO.to(gameState.roomId).emit("game:started");
+
+        setTimeout(() => {
+          startQuestion();
+        }, 2000);
+
+        console.log("[Fact or Trick] Game started - both players ready");
       }
     });
 
     socket.on("host:start", () => {
-      if (Object.keys(gameState.players).length !== 2) {
-        socket.emit("host:error", { message: "يجب أن يكون هناك لاعبان للبدء" });
+      // Check if both players are ready
+      const allPlayersReady =
+        Object.keys(gameState.players).length === 2 &&
+        Object.values(gameState.playersReady).every((ready) => ready === true);
+
+      if (!allPlayersReady) {
+        socket.emit("host:error", {
+          message: "يجب أن يكون كلا اللاعبان جاهزين للبدء",
+        });
         return;
       }
+
+      if (gameState.gameStarted) return;
 
       gameState.gameStarted = true;
       gameState.currentQuestion = 0;
@@ -432,13 +480,15 @@ function initSocket(httpServer, namespace = "/fact-or-trick") {
         totalRounds: gameState.totalRounds,
       });
 
-      console.log("[Fact or Trick] New game started");
+      console.log(`\n[Fact or Trick] 🎮 New game started with room ${roomId}`);
+      console.log(`[Fact or Trick] 📱 Mobile Controller URL: ${controllerUrl}\n`);
     });
 
     socket.on("disconnect", () => {
       const player = gameState.players[socket.id];
       if (player) {
         delete gameState.players[socket.id];
+        delete gameState.playersReady[socket.id];
         factOrTrickIO.to("host").emit("player:disconnected", {
           playerNumber: player.number,
         });

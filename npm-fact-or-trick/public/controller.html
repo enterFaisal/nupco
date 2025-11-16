@@ -43,8 +43,11 @@
           <div class="badge-text" id="player-name">اللاعب 1</div>
         </div>
         <h2 class="status-title">متصل بنجاح!</h2>
-        <p class="status-text">انتظر حتى يبدأ المضيف اللعبة...</p>
-        <div class="waiting-animation">
+        <p class="status-text" id="waiting-status-text">اضغط جاهز للبدء</p>
+        <button id="ready-btn" class="btn primary ready-btn">
+          <span id="ready-btn-text">جاهز</span>
+        </button>
+        <div class="waiting-animation hidden" id="waiting-animation">
           <div class="dot"></div>
           <div class="dot"></div>
           <div class="dot"></div>
@@ -152,7 +155,11 @@
         </div>
 
         <p class="final-text">شكراً لمشاركتك!</p>
-        <p class="final-text-small">انتظر اللعبة القادمة...</p>
+        <div class="refresh-timer">
+          <p class="final-text-small">ستبدأ لعبة جديدة خلال</p>
+          <div class="timer-display" id="refresh-timer-display">15</div>
+          <p class="final-text-small">ثانية</p>
+        </div>
       </div>
     </div>
 

@@ -61,6 +61,7 @@ let gameState = {
   roundInProgress: false,
   totalRounds: 7,
   questionTimer: null,
+  playersReady: {},
 };
 
 // Load questions from JSON file
@@ -95,6 +96,7 @@ function initializeGame() {
   gameState.gameStarted = false;
   gameState.questionStartTime = null;
   gameState.roundInProgress = false;
+  gameState.playersReady = {};
 
   // Shuffle and select questions
   const shuffled = [...questionsDatabase].sort(() => Math.random() - 0.5);
@@ -146,8 +148,8 @@ io.on("connection", (socket) => {
       totalRounds: gameState.totalRounds,
     });
 
-    console.log(`Host initialized with room ${roomId}`);
-    console.log(`Controller URL: ${controllerUrl}`);
+    console.log(`\n🎮 Host initialized with room ${roomId}`);
+    console.log(`📱 Mobile Controller URL: ${controllerUrl}\n`);
   });
 
   // Player joins game
@@ -179,6 +181,7 @@ io.on("connection", (socket) => {
       score: 0,
       answers: [],
     };
+    gameState.playersReady[socket.id] = false;
 
     socket.join(roomId);
 
@@ -192,22 +195,66 @@ io.on("connection", (socket) => {
       playerNumber,
       playerName: `اللاعب ${playerNumber}`,
       totalPlayers: Object.keys(gameState.players).length,
+      isReady: false,
     });
 
     console.log(`Player ${playerNumber} joined room ${roomId}`);
+  });
 
-    // If both players connected, enable start button
-    if (Object.keys(gameState.players).length === 2) {
-      io.to("host").emit("game:ready");
+  // Player ready
+  socket.on("player:ready", () => {
+    const player = gameState.players[socket.id];
+    if (!player || gameState.gameStarted) return;
+
+    gameState.playersReady[socket.id] = true;
+
+    // Notify host
+    io.to("host").emit("player:ready", {
+      playerNumber: player.number,
+    });
+
+    // Check if all players are ready
+    const allPlayersReady =
+      Object.keys(gameState.players).length === 2 &&
+      Object.values(gameState.playersReady).every((ready) => ready === true);
+
+    // Notify all players about ready status
+    io.to(gameState.roomId).emit("player:readyStatus", {
+      allReady: allPlayersReady,
+    });
+
+    if (allPlayersReady) {
+      // Auto-start game when both players are ready
+      gameState.gameStarted = true;
+      gameState.currentQuestion = 0;
+
+      io.to("host").emit("game:started");
+      io.to(gameState.roomId).emit("game:started");
+
+      // Start first question after a delay
+      setTimeout(() => {
+        startQuestion();
+      }, 2000);
+
+      console.log("Game started - both players ready");
     }
   });
 
-  // Host starts game
+  // Host starts game (deprecated - now auto-starts when both ready)
   socket.on("host:start", () => {
-    if (Object.keys(gameState.players).length !== 2) {
-      socket.emit("host:error", { message: "يجب أن يكون هناك لاعبان للبدء" });
+    // Check if both players are ready
+    const allPlayersReady =
+      Object.keys(gameState.players).length === 2 &&
+      Object.values(gameState.playersReady).every((ready) => ready === true);
+
+    if (!allPlayersReady) {
+      socket.emit("host:error", {
+        message: "يجب أن يكون كلا اللاعبان جاهزين للبدء",
+      });
       return;
     }
+
+    if (gameState.gameStarted) return;
 
     gameState.gameStarted = true;
     gameState.currentQuestion = 0;
@@ -298,7 +345,8 @@ io.on("connection", (socket) => {
       totalRounds: gameState.totalRounds,
     });
 
-    console.log("New game started");
+    console.log(`\n🎮 New game started with room ${roomId}`);
+    console.log(`📱 Mobile Controller URL: ${controllerUrl}\n`);
   });
 
   // Disconnect
@@ -306,6 +354,7 @@ io.on("connection", (socket) => {
     const player = gameState.players[socket.id];
     if (player) {
       delete gameState.players[socket.id];
+      delete gameState.playersReady[socket.id];
       io.to("host").emit("player:disconnected", {
         playerNumber: player.number,
       });

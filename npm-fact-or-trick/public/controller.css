@@ -604,6 +604,38 @@ body {
   color: #fff;
 }
 
+.btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ready-btn {
+  margin-top: clamp(20px, 3vh, 32px);
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  padding: clamp(16px, 2.5vh, 20px) clamp(48px, 8vw, 64px);
+}
+
+.refresh-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 1.5vh, 12px);
+  margin-top: clamp(16px, 2.5vh, 24px);
+}
+
+.timer-display {
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-weight: 900;
+  color: var(--accent);
+  background: rgba(224, 110, 14, 0.1);
+  padding: clamp(12px, 2vh, 16px) clamp(24px, 4vw, 32px);
+  border-radius: var(--radius);
+  border: 2px solid var(--accent);
+  min-width: 80px;
+  text-align: center;
+}
+
 /* ------------------------------------------------------
    Landscape Warning
 ------------------------------------------------------ */

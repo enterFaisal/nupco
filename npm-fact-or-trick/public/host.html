@@ -39,6 +39,7 @@
               <div class="player-icon">👤</div>
               <div class="player-label">اللاعب 1</div>
               <div class="status-indicator waiting"></div>
+              <div class="ready-status" id="player1-ready">⏳ في الانتظار</div>
             </div>
 
             <!-- QR code in middle (lower position) -->
@@ -54,12 +55,10 @@
               <div class="player-icon">👤</div>
               <div class="player-label">اللاعب 2</div>
               <div class="status-indicator waiting"></div>
+              <div class="ready-status" id="player2-ready">⏳ في الانتظار</div>
             </div>
           </div>
 
-          <button id="start-game-btn" class="btn primary hidden">
-            ابدأ اللعبة
-          </button>
         </div>
       </div>
 
@@ -198,7 +197,11 @@
             </div>
           </div>
 
-          <button id="new-game-btn" class="btn primary">لعبة جديدة</button>
+          <div class="refresh-timer-host">
+            <p class="refresh-timer-text">ستبدأ لعبة جديدة خلال</p>
+            <div class="refresh-timer-display" id="refresh-timer-host">15</div>
+            <p class="refresh-timer-text">ثانية</p>
+          </div>
         </div>
       </div>
     </main>
