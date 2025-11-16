@@ -154,20 +154,23 @@ socket.on(
 );
 
 // Player connected
-socket.on("player:connected", ({ playerNumber, playerName, totalPlayers, isReady }) => {
-  const slot = playerNumber === 1 ? player1Slot : player2Slot;
-  slot.classList.add("connected");
-  slot.querySelector(".status-indicator").classList.remove("waiting");
-  slot.querySelector(".status-indicator").classList.add("connected");
-  
-  const readyStatus = document.getElementById(`player${playerNumber}-ready`);
-  if (readyStatus) {
-    readyStatus.textContent = isReady ? "✓ جاهز" : "⏳ في الانتظار";
-    readyStatus.classList.toggle("ready", isReady);
-  }
+socket.on(
+  "player:connected",
+  ({ playerNumber, playerName, totalPlayers, isReady }) => {
+    const slot = playerNumber === 1 ? player1Slot : player2Slot;
+    slot.classList.add("connected");
+    slot.querySelector(".status-indicator").classList.remove("waiting");
+    slot.querySelector(".status-indicator").classList.add("connected");
 
-  console.log(`${playerName} connected (${totalPlayers}/2)`);
-});
+    const readyStatus = document.getElementById(`player${playerNumber}-ready`);
+    if (readyStatus) {
+      readyStatus.textContent = isReady ? "✓ جاهز" : "⏳ في الانتظار";
+      readyStatus.classList.toggle("ready", isReady);
+    }
+
+    console.log(`${playerName} connected (${totalPlayers}/2)`);
+  }
+);
 
 // Player ready
 socket.on("player:ready", ({ playerNumber }) => {
@@ -365,7 +368,7 @@ function resetPlayerSlots() {
     const indicator = slot.querySelector(".status-indicator");
     indicator.classList.remove("connected");
     indicator.classList.add("waiting");
-    
+
     const readyStatus = document.getElementById(`player${index + 1}-ready`);
     if (readyStatus) {
       readyStatus.textContent = "⏳ في الانتظار";
